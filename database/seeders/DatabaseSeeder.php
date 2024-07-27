@@ -15,16 +15,6 @@ class DatabaseSeeder extends Seeder
      */
     public function run()
     {
-        $this->call(PermissionTableSeeder::class);
-        $this->call(RolesTableSeeder::class);
         $this->call(UserTableSeeder::class);
-        $this->call(ChoiceTestAnswerSeeder::class);
-        $this->call(ChoiceTestQuestionSeeder::class);
-        $this->call(RolePlayGroup::class);
-        $this->call(RolePlaySubGroup::class);
-        $this->call(RolePlayQuestions::class);
-        $this->call(BenchMarkGroup::class);
-        $this->call(BenchMarkQuestions::class);
-        $this->call(QuickResponseQuestions::class);
     }
 }
