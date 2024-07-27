@@ -15,7 +15,7 @@ return new class extends Migration
             $table->id();
             $table->string('company_code',10)->nullable();
             $table->string('company_name')->nullable();
-            $table->string('company_address')->nullable();
+            $table->text('company_address')->nullable();
             $table->string('company_telephone',15)->nullable();
             $table->string('company_fax',15)->nullable();
             $table->string('company_type',10)->nullable();

@@ -9,7 +9,7 @@
         </a>
     </div>
     <hr class="horizontal dark mt-0">
-    <div class="collapse navbar-collapse  w-auto " id="sidenav-collapse-main">
+    <div class="collapse navbar-collapse w-auto" id="sidenav-collapse-main">
         <ul class="navbar-nav">
             <li class="nav-item">
                 <a class="nav-link {{ Route::currentRouteName() == 'home' ? 'active' : '' }}" href="{{ route('home') }}">
@@ -26,7 +26,7 @@
                 <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Transaction</h6>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'user') == true ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ str_contains(request()->url(), 'sales-letter') == true ? 'active' : '' }}" href="#">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         viewBox="0 0 512 512" xml:space="preserve">
@@ -99,7 +99,7 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'user') == true ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ str_contains(request()->url(), 'puchase-order') == true ? 'active' : '' }}" href="#">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         viewBox="0 0 512 512" xml:space="preserve">
@@ -152,7 +152,46 @@
                 </a>
             </li>
             <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'user') == true ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ str_contains(request()->url(), 'shipment') == true ? 'active' : '' }}" href="#">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                    <svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                        viewBox="0 0 512 512" xml:space="preserve">
+                        <g>
+                            <g>
+                                <path d="M495.304,55.652H217.043c-9.22,0-16.696,7.475-16.696,16.696v50.087c-15.823,0-98.755,0-116.87,0
+                                    c-27.618,0-50.087,22.469-50.087,50.087c0,11.703,0,107.704,0,119.741C13.959,299.155,0,317.713,0,339.478v66.783
+                                    c0,9.22,7.475,16.696,16.696,16.696h47.393c6.892,19.433,25.45,33.391,47.215,33.391s40.323-13.959,47.215-33.391h200.526
+                                    c6.892,19.433,25.45,33.391,47.215,33.391s40.323-13.959,47.215-33.391h41.828c9.22,0,16.696-7.475,16.696-16.696V306.087V72.348
+                                    C512,63.127,504.525,55.652,495.304,55.652z M66.783,172.522c0-9.206,7.49-16.696,16.696-16.696h50.087v66.783H66.783V172.522z
+                                    M66.783,256h83.478c9.22,0,16.696-7.475,16.696-16.696v-83.478h33.391v133.565H66.783V256z M111.304,422.957
+                                    c-9.206,0-16.696-7.49-16.696-16.696s7.49-16.696,16.696-16.696c9.206,0,16.696,7.49,16.696,16.696
+                                    S120.51,422.957,111.304,422.957z M200.35,389.565h-41.83c-6.892-19.433-25.45-33.391-47.215-33.391s-40.323,13.959-47.215,33.391
+                                    H33.391v-50.087c0-9.206,7.49-16.696,16.696-16.696H200.35V389.565z M406.261,422.957c-9.199,0-16.682-7.479-16.695-16.674
+                                    c0-0.008,0.001-0.014,0.001-0.021s-0.001-0.014-0.001-0.021c0.012-9.196,7.495-16.674,16.695-16.674
+                                    c9.206,0,16.696,7.49,16.696,16.696S415.467,422.957,406.261,422.957z M478.609,389.565h-25.133
+                                    c-6.892-19.433-25.45-33.391-47.215-33.391s-40.323,13.959-47.215,33.391H233.741v-66.783h244.867V389.565z M478.609,289.391
+                                    H233.741c0-11.155-0.002-189.225-0.002-200.348h244.87V289.391z"/>
+                            </g>
+                        </g>
+                        <g>
+                            <g>
+                                <path d="M428.522,122.435H328.348c-9.22,0-16.696,7.475-16.696,16.696s7.475,16.696,16.696,16.696h100.174
+                                    c9.22,0,16.696-7.475,16.696-16.696S437.742,122.435,428.522,122.435z"/>
+                            </g>
+                        </g>
+                        <g>
+                            <g>
+                                <path d="M428.522,189.217h-66.783c-9.22,0-16.696,7.475-16.696,16.696c0,9.22,7.475,16.696,16.696,16.696h66.783
+                                    c9.22,0,16.696-7.475,16.696-16.696C445.217,196.693,437.742,189.217,428.522,189.217z"/>
+                            </g>
+                        </g>
+                    </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Shipping</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'invoice') == true ? 'active' : '' }}" href="#">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         viewBox="0 0 512.001 512.001" xml:space="preserve">
@@ -234,9 +273,88 @@
                     <span class="nav-link-text ms-1">Invoices</span>
                 </a>
             </li>
+            <li class="nav-item mt-3 d-flex align-items-center">
+                <div class="ps-4">
+                </div>
+                <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Master Data</h6>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'user') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'user/index']) }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg width="800px" height="800px" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M16 15H8C5.79086 15 4 16.7909 4 19V21H20V19C20 16.7909 18.2091 15 16 15Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                            <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Master Users</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'master-company') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'master-company/index']) }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg fill="#000000" height="800px" width="800px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 512 512" xml:space="preserve">
+                            <g>
+                                <g>
+                                    <path d="M489.739,166.957c9.22,0,16.696-7.475,16.696-16.696v-50.087c0-18.412-14.979-33.391-33.391-33.391H372.87V33.391
+                                        C372.87,14.979,357.89,0,339.478,0H172.522C154.11,0,139.13,14.979,139.13,33.391v33.391H38.957
+                                        c-18.412,0-33.391,14.979-33.391,33.391v50.087c0,9.22,7.475,16.696,16.696,16.696h16.696c0,13.601,0,295.377,0,311.652H22.261
+                                        c-9.22,0-16.696,7.475-16.696,16.696S13.04,512,22.261,512c11.758,0,456.737,0,467.478,0c9.22,0,16.696-7.475,16.696-16.696
+                                        s-7.475-16.696-16.696-16.696h-16.696c0-16.281,0-298.041,0-311.652H489.739z M172.522,33.391h166.957v33.391H172.522V33.391z
+                                        M205.913,378.435h-16.696c-9.22,0-16.696,7.475-16.696,16.696s7.475,16.696,16.696,16.696h16.696v66.783H139.13V345.043h66.783
+                                        V378.435z M439.652,478.609H239.304V328.348c0-9.22-7.475-16.696-16.696-16.696H122.435c-9.22,0-16.696,7.475-16.696,16.696
+                                        v150.261H72.348V269.276c9.831,5.702,21.231,8.984,33.391,8.984c19.932,0,37.84-8.789,50.087-22.68
+                                        c12.247,13.892,30.155,22.68,50.087,22.68c19.932,0,37.84-8.789,50.087-22.68c12.247,13.892,30.155,22.68,50.087,22.68
+                                        s37.84-8.789,50.087-22.68c12.247,13.892,30.155,22.68,50.087,22.68c12.16,0,23.56-3.282,33.391-8.984V478.609z M72.348,211.478
+                                        v-44.522h66.783v44.522c0,18.412-14.979,33.391-33.391,33.391S72.348,229.89,72.348,211.478z M172.522,211.478v-44.522h66.783
+                                        v44.522c0,18.412-14.979,33.391-33.391,33.391C187.501,244.87,172.522,229.89,172.522,211.478z M272.696,211.478v-44.522h66.783
+                                        v44.522c0,18.412-14.979,33.391-33.391,33.391C287.675,244.87,272.696,229.89,272.696,211.478z M439.652,211.478
+                                        c0,18.412-14.979,33.391-33.391,33.391c-18.412,0-33.391-14.979-33.391-33.391v-44.522h66.783V211.478z M38.957,133.565v-33.391
+                                        c7.607,0,423.505,0,434.087,0v33.391C454.666,133.565,50.492,133.565,38.957,133.565z"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <path d="M389.565,311.652H289.391c-9.22,0-16.696,7.475-16.696,16.696v100.174c0,9.22,7.475,16.696,16.696,16.696h100.174
+                                        c9.22,0,16.696-7.475,16.696-16.696V328.348C406.261,319.127,398.786,311.652,389.565,311.652z M372.87,411.826h-66.783v-66.783
+                                        h66.783V411.826z"/>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Master Company</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'role') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'role/index']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="ni ni-world-2 text-danger text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Role</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'permissions') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'permissions/index']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa fa-lock text-danger text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Permissions</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'setup') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'setup/index']) }}">
+                    <div
+                        class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <i class="fa fa-cog text-danger text-sm opacity-10"></i>
+                    </div>
+                    <span class="nav-link-text ms-1">Setup</span>
+                </a>
+            </li>
         </ul>
     </div>
-    <div class="sidenav-footer mx-3 ">
+    {{-- <div class="sidenav-footer mx-3 "> --}}
         {{-- <div class="card card-plain shadow-none" id="sidenavCard">
             <img class="w-50 mx-auto" src="/img/illustrations/icon-documentation-warning.svg"
                 alt="sidebar_illustration">
@@ -251,5 +369,5 @@
             class="btn btn-dark btn-sm w-100 mb-3">Documentation</a>
         <a class="btn btn-primary btn-sm mb-0 w-100"
             href="https://www.creative-tim.com/product/argon-dashboard-pro-laravel" target="_blank" type="button">Upgrade to PRO</a> --}}
-    </div>
+    {{-- </div> --}}
 </aside>

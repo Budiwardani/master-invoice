@@ -62,6 +62,13 @@
             @endphp
         }
     });
+
+    $(document).ready(function($) {
+        new DataTable('#example', {
+            pageLength: 100,
+            order: [[4, 'asc'],[2, 'asc']]
+        });
+    })
 </script>
 <style>
 footer {

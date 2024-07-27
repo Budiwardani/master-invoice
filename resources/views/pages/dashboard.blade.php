@@ -174,11 +174,69 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Invoice</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Shipment</p>
                                 </div>
                             </div>
                             <div class="col-4 text-end">
                                 <div class="icon icon-shape bg-gradient-success shadow-success text-center rounded-circle pt-2">
+                                    <svg fill="#fff" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                                        viewBox="0 0 512 512" xml:space="preserve">
+                                        <g>
+                                            <g>
+                                                <path d="M495.304,55.652H217.043c-9.22,0-16.696,7.475-16.696,16.696v50.087c-15.823,0-98.755,0-116.87,0
+                                                    c-27.618,0-50.087,22.469-50.087,50.087c0,11.703,0,107.704,0,119.741C13.959,299.155,0,317.713,0,339.478v66.783
+                                                    c0,9.22,7.475,16.696,16.696,16.696h47.393c6.892,19.433,25.45,33.391,47.215,33.391s40.323-13.959,47.215-33.391h200.526
+                                                    c6.892,19.433,25.45,33.391,47.215,33.391s40.323-13.959,47.215-33.391h41.828c9.22,0,16.696-7.475,16.696-16.696V306.087V72.348
+                                                    C512,63.127,504.525,55.652,495.304,55.652z M66.783,172.522c0-9.206,7.49-16.696,16.696-16.696h50.087v66.783H66.783V172.522z
+                                                    M66.783,256h83.478c9.22,0,16.696-7.475,16.696-16.696v-83.478h33.391v133.565H66.783V256z M111.304,422.957
+                                                    c-9.206,0-16.696-7.49-16.696-16.696s7.49-16.696,16.696-16.696c9.206,0,16.696,7.49,16.696,16.696
+                                                    S120.51,422.957,111.304,422.957z M200.35,389.565h-41.83c-6.892-19.433-25.45-33.391-47.215-33.391s-40.323,13.959-47.215,33.391
+                                                    H33.391v-50.087c0-9.206,7.49-16.696,16.696-16.696H200.35V389.565z M406.261,422.957c-9.199,0-16.682-7.479-16.695-16.674
+                                                    c0-0.008,0.001-0.014,0.001-0.021s-0.001-0.014-0.001-0.021c0.012-9.196,7.495-16.674,16.695-16.674
+                                                    c9.206,0,16.696,7.49,16.696,16.696S415.467,422.957,406.261,422.957z M478.609,389.565h-25.133
+                                                    c-6.892-19.433-25.45-33.391-47.215-33.391s-40.323,13.959-47.215,33.391H233.741v-66.783h244.867V389.565z M478.609,289.391
+                                                    H233.741c0-11.155-0.002-189.225-0.002-200.348h244.87V289.391z"/>
+                                            </g>
+                                        </g>
+                                        <g>
+                                            <g>
+                                                <path d="M428.522,122.435H328.348c-9.22,0-16.696,7.475-16.696,16.696s7.475,16.696,16.696,16.696h100.174
+                                                    c9.22,0,16.696-7.475,16.696-16.696S437.742,122.435,428.522,122.435z"/>
+                                            </g>
+                                        </g>
+                                        <g>
+                                            <g>
+                                                <path d="M428.522,189.217h-66.783c-9.22,0-16.696,7.475-16.696,16.696c0,9.22,7.475,16.696,16.696,16.696h66.783
+                                                    c9.22,0,16.696-7.475,16.696-16.696C445.217,196.693,437.742,189.217,428.522,189.217z"/>
+                                            </g>
+                                        </g>
+                                    </svg>
+                                </div>
+                            </div>
+                        </div>
+                        <br>
+                        <div class="row">
+                            <div class="col-6 bg-gradient-success text-center">
+                                1 Done
+                            </div>
+                            <div class="col-6 bg-gradient-warning text-center">
+                                1 On Progress
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
+                <div class="card">
+                    <div class="card-body p-3">
+                        <div class="row">
+                            <div class="col-8">
+                                <div class="numbers">
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Invoice</p>
+                                </div>
+                            </div>
+                            <div class="col-4 text-end">
+                                <div class="icon icon-shape bg-gradient-warning shadow-success text-center rounded-circle pt-2">
                                     <svg fill="#fff" height="30px" width="30px" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                                         viewBox="0 0 512.001 512.001" xml:space="preserve">
                                         <g>
@@ -270,7 +328,7 @@
                     </div>
                 </div>
             </div>
-            <div class="col-xl-3 col-sm-6">
+            {{-- <div class="col-xl-3 col-sm-6">
                 <div class="card">
                     <div class="card-body p-3">
                         <div class="row">
@@ -293,7 +351,7 @@
                         </div>
                     </div>
                 </div>
-            </div>
+            </div> --}}
         </div>
         {{-- <div class="row mt-4">
             <div class="col-lg-7 mb-lg-0 mb-4">

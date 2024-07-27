@@ -34,7 +34,7 @@ class HomeController extends Controller
     {
         $rolename = '';
         $user_id = auth()->user()->id;
-        $user = User::where('id',$user_id)->first();
+        $user = User::where("id",$user_id)->first();
         // $rolenames = $user->getRoleNames();
         // if(count($rolenames)){
         //     $rolename = $rolenames[0];
