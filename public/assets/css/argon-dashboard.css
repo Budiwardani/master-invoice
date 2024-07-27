@@ -20345,7 +20345,7 @@ label,
 }
 
 .bg-gradient-primary {
-  background-image: linear-gradient(310deg, #007bff 0%, #f56036 100%);
+  background-image: linear-gradient(310deg, #007bff 0%, #007bff 100%);
 }
 
 .bg-gradient-secondary {
@@ -20361,7 +20361,7 @@ label,
 }
 
 .bg-gradient-warning {
-  background-image: linear-gradient(310deg, #007bff 0%, #fbb140 100%);
+  background-image: linear-gradient(310deg, #fbb140 0%, #fbb140 100%);
 }
 
 .bg-gradient-danger {
@@ -21112,7 +21112,7 @@ hr.horizontal.gray-light {
   margin-left: 0.5rem;
 }
 .navbar-vertical .navbar-nav .nav-link .icon {
-  padding: 10px;
+  padding: 7px;
 }
 .navbar-vertical .navbar-nav .nav-sm .nav-link {
   font-size: 0.8125rem;

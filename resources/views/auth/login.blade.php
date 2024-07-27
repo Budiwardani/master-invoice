@@ -17,29 +17,23 @@
                         <div class="col-xl-6 col-lg-6 col-md-6 d-flex flex-column mx-lg-0 mx-auto">
                             <div class="card card-primary">
                                 <div class="card-header pb-0 text-center">
-                                    <h2>ES-EXCELLENT</h2>
+                                    <h2>Sistem Invoice</h2>
                                     <h4 class="font-weight-bolder">Sign In</h4>
-                                    {{-- <p class="mb-0">Enter your email and password to sign in</p> --}}
                                 </div>
                                 <div class="card-body">
                                     <form role="form" method="POST" action="{{ route('login.perform') }}">
                                         @csrf
                                         @method('post')
-                                        {{-- <div class="flex flex-col mb-3"> --}}
                                         <div class="form-floating mt-3 mb-3">
-                                            <input type="text" name="email" id="email" class="form-control" value="{{ old('email') ?? 'admin@argon.com' }}">
-                                            <label for="email">User Name</label>
+                                            <input type="text" name="email" id="floatingInput" class="form-control" value="{{ old('email') ?? 'admin@test.com' }}"  placeholder="Email">
+                                            <label for="floatingInput">Email</label>
                                             @error('email') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                         </div>
                                         <div class="form-floating mt-3 mb-3">
-                                            <input type="password" id="password" name="password" class="form-control">
-                                            <label for="password">Password</label>
-                                            {{-- @error('password') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror --}}
+                                            <input type="password" id="floatingPassword" name="password" class="form-control" placeholder="Password">
+                                            <label for="floatingPassword">Password</label>
+                                            @error('password') <p class="text-danger text-xs pt-1"> {{$message}} </p>@enderror
                                         </div>
-                                        {{-- <div class="form-check form-switch">
-                                            <input class="form-check-input" name="remember" type="checkbox" id="rememberMe">
-                                            <label class="form-check-label" for="rememberMe">Remember me</label>
-                                        </div> --}}
                                         <div class="text-center">
                                             <button type="submit" class="btn btn-lg btn-primary btn-lg w-100 mt-4 mb-0">Sign in</button>
                                         </div>
