@@ -42,7 +42,6 @@
     var message = '';
     document.addEventListener('DOMContentLoaded', function() {
         var message = '';
-
         @if(session('success') == 'updated')
             message = 'Data Updated';
         @elseif (session('success') == 'created')
@@ -64,10 +63,7 @@
     });
 
     $(document).ready(function($) {
-        new DataTable('#example', {
-            pageLength: 100,
-            order: [[4, 'asc'],[2, 'asc']]
-        });
+        new DataTable('#example');
     })
 </script>
 <style>

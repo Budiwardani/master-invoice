@@ -1,50 +1,17 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Edit Management'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Create New Role'])
     <div class="card shadow-lg mx-4 mt-8" id="user_info">
         <div class="card-body p-3">
             <div class="row gx-4">
-                <form role="form" method="post" action="{{ route('user.store') }}">
+                <form role="form" method="post" action="{{ route('role.store') }}">
                     @csrf
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="fw-bold">Name</label>
-                                <input class="form-control" value="" name="name" type="text" placeholder="Name">
-                            </div>
-                        </div>
-                    </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="fw-bold">Email</label>
-                                <input class="form-control" value="" name="email" type="email" placeholder="email">
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="fw-bold">Company</label>
-                                <select class="form-control" name="company_id">
-                                    <option value="" disabled selected>Choose One</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->company_name }}</option>
-                                    @endforeach
-                                </select>
-                            </div>
-                        </div>
+                    <div>
+                        <label class="fw-bold">Role Name</label>
+                        <input class="form-control" value="" name="rolename" type="text" placeholder="Role Name">
                     </div>
                     <hr>
-                    <div class="mb-3">
-                        <label class="fw-bold">Role</label>
-                        <br>
-                        @foreach ($roles as $role)
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" value="{{ $role->name }}" name="roles" id="{{ $role->id }}">
-                                <label class="form-check-label" for="{{ $role->id }}">{{ $role->name }}</label>
-                            </div>
-                        @endforeach
-                    </div>
                     <div class="row mt-3">
                         <div class="col-12">
                             <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>

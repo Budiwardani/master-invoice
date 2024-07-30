@@ -11,7 +11,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="fw-bold">Company Code</label>
-                                <input class="form-control" value="" name="company_code" type="text" placeholder="Company Code">
+                                <input class="form-control" value="{{ old('company_code') }}" name="company_code" type="text" placeholder="Company Code">
                             </div>
                             @error('company_code')
                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -24,6 +24,7 @@
                                     <option value="" disabled selected>Choose One</option>
                                     <option value="supplier">Supplier</option>
                                     <option value="customer">Customer</option>
+                                    <option value="owner">Owner</option>
                                 </select>
                             </div>
                             @error('company_type')
@@ -35,7 +36,7 @@
                         <div class="col-md-6">
                             <div class="mb-3">
                                 <label class="fw-bold">Name</label>
-                                <input class="form-control" value="" name="company_name" type="text" placeholder="Company Name">
+                                <input class="form-control" value="{{ old('company_name') }}" name="company_name" type="text" placeholder="Company Name">
                             </div>
                             @error('company_name')
                                 <div class="alert alert-danger">{{ $message }}</div>
@@ -46,7 +47,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="fw-bold">Telephone</label>
-                                        <input class="form-control" value="" name="telephone" type="text" placeholder="Telephone">
+                                        <input class="form-control" value="{{ old('telephone') }}" name="telephone" type="text" placeholder="Telephone">
                                     </div>
                                     @error('telephone')
                                         <div class="alert alert-danger">{{ $message }}</div>
@@ -55,7 +56,7 @@
                                 <div class="col-md-6">
                                     <div class="mb-3">
                                         <label class="fw-bold">Fax</label>
-                                        <input class="form-control" value="" name="fax" type="text" placeholder="FAX">
+                                        <input class="form-control" value="{{ old('fax') }}" name="fax" type="text" placeholder="FAX">
                                     </div>
                                     @error('fax')
                                         <div class="alert alert-danger">{{ $message }}</div>
@@ -68,7 +69,7 @@
                         <div class="col-md-12">
                             <div class="mb-3">
                                 <label class="fw-bold">Address</label>
-                                <textarea class="form-control" value="" name="company_address" type="text" placeholder="Company Address"></textarea>
+                                <textarea class="form-control" value="{{ old('company_address') }}" name="company_address" type="text" placeholder="Company Address"></textarea>
                             </div>
                             @error('company_address')
                                 <div class="alert alert-danger">{{ $message }}</div>

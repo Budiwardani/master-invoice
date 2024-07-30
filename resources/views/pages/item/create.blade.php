@@ -10,7 +10,7 @@
                     <div class="row">
                         <div class="col-md-12">
                             <div class="mb-3">
-                                <label class="fw-bold">Name</label>
+                                <label class="fw-bold">Item</label>
                                 <input class="form-control" value="" name="name" type="text" placeholder="Name">
                             </div>
                         </div>
@@ -18,32 +18,16 @@
                     <div class="row">
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="fw-bold">Email</label>
-                                <input class="form-control" value="" name="email" type="email" placeholder="email">
+                                <label class="fw-bold">Item Code</label>
+                                <input class="form-control" value="" name="item_code" type="text" inputmode="numeric" placeholder="item_code">
                             </div>
                         </div>
                         <div class="col-md-6">
                             <div class="mb-3">
-                                <label class="fw-bold">Company</label>
-                                <select class="form-control" name="company_id">
-                                    <option value="" disabled selected>Choose One</option>
-                                    @foreach ($companies as $company)
-                                        <option value="{{ $company->id }}">{{ $company->company_name }}</option>
-                                    @endforeach
-                                </select>
+                                <label class="fw-bold">Item Name</label>
+                                <input class="form-control" value="" name="item_name" type="text" placeholder="item_name">
                             </div>
                         </div>
-                    </div>
-                    <hr>
-                    <div class="mb-3">
-                        <label class="fw-bold">Role</label>
-                        <br>
-                        @foreach ($roles as $role)
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" value="{{ $role->name }}" name="roles" id="{{ $role->id }}">
-                                <label class="form-check-label" for="{{ $role->id }}">{{ $role->name }}</label>
-                            </div>
-                        @endforeach
                     </div>
                     <div class="row mt-3">
                         <div class="col-12">

@@ -1,7 +1,7 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Edit Management'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Edit User'])
     <div class="card shadow-lg mx-4 mt-8" id="user_info">
         <div class="card-body p-3">
             <div class="row gx-4">
@@ -53,7 +53,7 @@
                         <br>
                         @foreach ($roles as $role)
                             <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" value="{{ $role->id }}" name="roles" id="{{ $role->id }}" @if(count($user->roles)) @if($user->roles[0]->id == $role->id) checked @endif @endif>
+                                <input class="form-check-input" type="radio" value="{{ $role->name }}" name="roles" id="{{ $role->id }}" @if(count($user->roles)) @if($user->roles[0]->id == $role->id) checked @endif @endif>
                                 <label class="form-check-label" for="{{ $role->id }}">{{ $role->name }}</label>
                             </div>
                         @endforeach

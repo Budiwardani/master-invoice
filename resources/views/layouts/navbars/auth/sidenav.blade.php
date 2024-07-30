@@ -95,7 +95,7 @@
                         </g>
                     </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Sales Letters</span>
+                    <span class="nav-link-text ms-1">Quotation</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -148,7 +148,7 @@
                         </g>
                     </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Purchase Orders</span>
+                    <span class="nav-link-text ms-1">Purchase Order</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -187,7 +187,7 @@
                         </g>
                     </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Shipping</span>
+                    <span class="nav-link-text ms-1">Delivery Order</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -270,14 +270,18 @@
                         </g>
                     </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Invoices</span>
+                    <span class="nav-link-text ms-1">Invoice</span>
                 </a>
             </li>
+            {{-- {{ Auth::user()->hasAnyPermission(['master-invoice']) }} --}}
+            @if(Auth::user()->hasAnyPermission(['master-company','master-user','item.index']))
             <li class="nav-item mt-3 d-flex align-items-center">
                 <div class="ps-4">
                 </div>
                 <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Master Data</h6>
             </li>
+            @endif
+            {{-- {{ Auth::user()->getRoleNames }} --}}
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'user') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'user/index']) }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -286,7 +290,7 @@
                             <path d="M12 11C14.2091 11 16 9.20914 16 7C16 4.79086 14.2091 3 12 3C9.79086 3 8 4.79086 8 7C8 9.20914 9.79086 11 12 11Z" stroke="#000000" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
                         </svg>
                     </div>
-                    <span class="nav-link-text ms-1">Master Users</span>
+                    <span class="nav-link-text ms-1">Master User</span>
                 </a>
             </li>
             <li class="nav-item">
@@ -323,6 +327,182 @@
                         </svg>
                     </div>
                     <span class="nav-link-text ms-1">Master Company</span>
+                </a>
+            </li>
+            <li class="nav-item">
+                <a class="nav-link {{ str_contains(request()->url(), 'master-item') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'master-item/index']) }}">
+                    <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
+                        <svg fill="#000000" version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
+                            viewBox="0 0 512 512" xml:space="preserve">
+                            <g>
+                                <g>
+                                    <path d="M217.043,0H16.696C7.475,0,0,7.475,0,16.696v200.348c0,9.22,7.475,16.696,16.696,16.696h200.348
+                                        c9.22,0,16.696-7.475,16.696-16.696V16.696C233.739,7.475,226.264,0,217.043,0z M200.348,200.348H33.391V33.391h166.957V200.348z"
+                                        />
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <path d="M150.261,66.783H83.478c-9.22,0-16.696,7.475-16.696,16.696v66.783c0,9.22,7.475,16.696,16.696,16.696h66.783
+                                        c9.22,0,16.696-7.475,16.696-16.696V83.478C166.957,74.258,159.481,66.783,150.261,66.783z M133.565,133.565h-33.391v-33.391
+                                        h33.391V133.565z"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <path d="M495.304,0H294.957c-9.22,0-16.696,7.475-16.696,16.696v200.348c0,9.22,7.475,16.696,16.696,16.696h200.348
+                                        c9.22,0,16.696-7.475,16.696-16.696V16.696C512,7.475,504.525,0,495.304,0z M478.609,200.348H311.652V33.391h166.957V200.348z"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <path d="M428.522,66.783h-66.783c-9.22,0-16.696,7.475-16.696,16.696v66.783c0,9.22,7.475,16.696,16.696,16.696h66.783
+                                        c9.22,0,16.696-7.475,16.696-16.696V83.478C445.217,74.258,437.742,66.783,428.522,66.783z M411.826,133.565h-33.391v-33.391
+                                        h33.391V133.565z"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <path d="M217.043,278.261H16.696C7.475,278.261,0,285.736,0,294.957v200.348C0,504.525,7.475,512,16.696,512h200.348
+                                        c9.22,0,16.696-7.475,16.696-16.696V294.957C233.739,285.736,226.264,278.261,217.043,278.261z M200.348,478.609H33.391V311.652
+                                        h166.957V478.609z"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <path d="M150.261,345.043H83.478c-9.22,0-16.696,7.475-16.696,16.696v66.783c0,9.22,7.475,16.696,16.696,16.696h66.783
+                                        c9.22,0,16.696-7.475,16.696-16.696v-66.783C166.957,352.519,159.481,345.043,150.261,345.043z M133.565,411.826h-33.391v-33.391
+                                        h33.391V411.826z"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="278.261" y="278.261" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="278.261" y="345.043" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="278.261" y="411.826" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="311.652" y="311.652" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="311.652" y="378.435" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="311.652" y="445.217" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="345.043" y="278.261" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="345.043" y="345.043" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="345.043" y="411.826" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="378.435" y="311.652" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="378.435" y="378.435" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="378.435" y="445.217" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="411.826" y="278.261" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="411.826" y="345.043" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="411.826" y="411.826" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="445.217" y="311.652" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="445.217" y="378.435" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="445.217" y="445.217" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="278.261" y="478.609" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="345.043" y="478.609" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="411.826" y="478.609" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="478.609" y="278.261" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="478.609" y="345.043" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="478.609" y="411.826" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                            <g>
+                                <g>
+                                    <rect x="478.609" y="478.609" width="33.391" height="33.391"/>
+                                </g>
+                            </g>
+                        </svg>
+                    </div>
+                    <span class="nav-link-text ms-1">Master Item</span>
                 </a>
             </li>
             <li class="nav-item">

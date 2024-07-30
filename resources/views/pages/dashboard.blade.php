@@ -10,7 +10,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Sales Letter</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">quotation</p>
                                 </div>
                             </div>
                             <div class="col-4 text-end">
@@ -174,7 +174,7 @@
                         <div class="row">
                             <div class="col-8">
                                 <div class="numbers">
-                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">Shipment</p>
+                                    <p class="text-sm mb-0 text-uppercase font-weight-bold">delivery order</p>
                                 </div>
                             </div>
                             <div class="col-4 text-end">

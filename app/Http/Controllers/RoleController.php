@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Permission;
 use App\Models\User;
 use Illuminate\Http\Request;
 use Spatie\Permission\Models\Role;
@@ -48,7 +49,7 @@ class RoleController extends Controller
             'guard_name'=> 'web'
         ]);
 
-        return redirect('role/index');
+        return redirect('role/index')->with('success','created');
     }
 
     /**
@@ -64,15 +65,31 @@ class RoleController extends Controller
      */
     public function edit(string $id)
     {
-        //
+        $role = Role::with('permissions')->findOrFail($id);
+        $permissions = Permission::all();
+        $permission_array = array();
+        foreach($role->permissions as $permission){
+            $permission_array[] = $permission->id;
+        }
+
+        return view('pages.roles.edit',[
+            'role'          => $role,
+            'permissions'   => $permissions,
+            'permission_array'  => $permission_array,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, $id)
     {
-        //
+        $role = Role::where('id',$id)->first();
+        $role->update(['name' => $request->name]);
+
+        $role->syncPermissions($request->permissions);
+
+        return redirect()->route('role.index')->with('success','updated');
     }
 
     /**

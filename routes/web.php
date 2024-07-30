@@ -27,7 +27,9 @@ use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\ChoiceTestController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\ItemController;
 use App\Http\Controllers\JudgesHasUserController;
+use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\QuickResponseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePlayController;
@@ -70,5 +72,32 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', [CompanyController::class, 'create'])->name('company.create');
         Route::post('/update/{slug}', [CompanyController::class, 'update'])->name('company.update');
         Route::post('/store', [CompanyController::class, 'store'])->name('company.store');
+    });
+
+    Route::prefix('master-item')->group(function () {
+        Route::get('/index',            [ItemController::class, 'index'])->name('item.index');
+        Route::get('/create',           [ItemController::class, 'create'])->name('item.create');
+        Route::get('/edit/{slug}',      [ItemController::class, 'edit'])->name('item.edit');
+        Route::post('/store',           [ItemController::class, 'store'])->name('item.store');
+        Route::post('/update/{slug}',   [ItemController::class, 'update'])->name('item.update');
+        Route::get('/show',             [ItemController::class, 'show'])->name('item.show');
+    });
+
+    Route::prefix('role')->group(function () {
+        Route::get('/index',            [RoleController::class, 'index'])->name('role.index');
+        Route::get('/create',           [RoleController::class, 'create'])->name('role.create');
+        Route::get('/edit/{slug}',      [RoleController::class, 'edit'])->name('role.edit');
+        Route::post('/store',           [RoleController::class, 'store'])->name('role.store');
+        Route::post('/update/{slug}',   [RoleController::class, 'update'])->name('role.update');
+        Route::get('/show',             [RoleController::class, 'show'])->name('role.show');
+    });
+
+    Route::prefix('permissions')->group(function () {
+        Route::get('/index',            [PermissionController::class, 'index'])->name('permission.index');
+        Route::get('/create',           [PermissionController::class, 'create'])->name('permission.create');
+        Route::get('/edit/{slug}',      [PermissionController::class, 'edit'])->name('permission.edit');
+        Route::post('/store',           [PermissionController::class, 'store'])->name('permission.store');
+        Route::post('/update/{slug}',   [PermissionController::class, 'update'])->name('permission.update');
+        Route::get('/show',             [PermissionController::class, 'show'])->name('permission.show');
     });
 });

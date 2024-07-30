@@ -3,6 +3,7 @@
 namespace App\Http\Controllers;
 
 use App\Http\Controllers\Controller;
+use App\Models\Company;
 use App\Models\User;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
@@ -15,7 +16,7 @@ class UserController extends Controller
      */
     public function index()
     {
-        $users = User::where('id','!=',1)->with('roles')->get();
+        $users = User::where('id','!=',1)->with('roles','permissions','company')->get();
 
         return view('pages.users.index',[
             'user'      => $users,
@@ -28,9 +29,11 @@ class UserController extends Controller
     public function create()
     {
         $roles  = Role::get();
+        $company = Company::get();
         return view('pages.users.create',[
             'user'      => [],
             'roles'     => $roles,
+            'companies' => $company,
         ]);
     }
 
@@ -47,15 +50,12 @@ class UserController extends Controller
 
         $insert = User::create([
             'name'          => $request->name,
-            'gender'        => $request->gender,
+            'company_id'        => $request->company_id,
             'email'         => $request->email,
-            'username'      => $request->email,
             'active'        => '1',
             'password'      => 'secret',
             'encrypted_id'  => '-'
         ]);
-
-        // dd('insert->id '.$insert->id,$insert->id.Carbon::now(),'md5 Now'.md5(Carbon::now()),'md5 uniq '.md5($insert->id.Carbon::now()));
 
         $encrypted_id   = md5($insert->id.Carbon::now());
 
@@ -65,7 +65,7 @@ class UserController extends Controller
 
         $insert->assignRole($request->roles);
 
-        return redirect('user/index');
+        return redirect('user/index')->with('success','created');
     }
 
     /**
