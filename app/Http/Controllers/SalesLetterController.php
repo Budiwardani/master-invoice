@@ -23,7 +23,6 @@ class SalesLetterController extends Controller
         foreach($role_name->roles as $role){
             array_push($roles_array,$role->name);
         }
-        $data = null;
 
         if(in_array('Supplier',$roles_array)){
             $data = SalesLetter::with('company','detail.item_data')->where('company_id',Auth::user()->company_id)->get();
@@ -36,6 +35,11 @@ class SalesLetterController extends Controller
                 }
             }
         }
+
+        if(!count($data)){
+            $data = array();
+        }
+        // dd($data);
 
         return view('pages.quotation.index',[
             'data'      => $data,
