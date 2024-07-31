@@ -1,41 +1,93 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Master Item'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Quotation'])
     <div class="card shadow-lg mx-4 mt-8" id="user_info">
         <div class="card-body p-3">
             <div class="row gx-4">
-                @if(Auth::user()->hasAnyPermission(['item.create']))
+                @if(Auth::user()->hasAnyPermission(['quotation.create']))
                 <form>
                     <div class="input-group mb-3">
-                        <a type="button" data-bs-toggle="modal" data-bs-target="#modal_add" class="btn btn-primary me-2"><i class="fa fa-plus-circle me-2"></i> NEW</a>
+                        <a type="button" href="{{ route('quotation.create') }}" class="btn btn-primary me-2"><i class="fa fa-plus-circle me-2"></i> NEW</a>
                     </div>
                 </form>
                 @endif
+                {{-- {{ dd($data) }} --}}
+                @if(Auth::user()->getRoleNames()[0] == 'Supplier')
                 <table class="table table-striped table-bordered table-hover" id="example">
                     <thead>
                         <tr>
                             <th style="width:100px;" class="text-center"> No. </th>
                             <th scope="col" class="text-center"> Item Code </th>
                             <th scope="col" class="text-center"> Item Name </th>
-                            <th scope="col" class="text-center"> Company </th>
+                            <th scope="col" class="text-center"> Price </th>
                             <th scope="col" style="width:10%" class="text-center">Action</th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($items as $index=>$item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $item->item_code }}</td>
-                            <td>{{ $item->item_name }}</td>
-                            <td>{{ $item->company->company_name }}</td>
-                            <td class="text-center">
-                                <a href="{{ './edit/'.$item->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> EDIT</a>
-                            </td>
-                        </tr>
+                        @foreach ($data as $index=>$item)
+                        {{ $item }}
+                            @foreach ($item->detail as $detail)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $detail->item_data->item_code }}</td>
+                                <td>{{ $detail->item_data->item_name }}</td>
+                                <td class="text-end">{{ $detail->price }}</td>
+                                <td class="text-center">
+                                    <a href="{{ './delete/'.$detail->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> Delete</a>
+                                </td>
+                            </tr>
+                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
+                @else
+                    @foreach ($data as $indx=>$d)
+                    @php
+                        $sanitizedIndex = preg_replace('/.[ ()=]/', '', $indx);
+                        $isExpanded = ($indx == 0);
+                    @endphp
+                    <div class="accordion" id="accordionPanelsStayOpenExample">
+                        <div class="accordion-item">
+                            <div class="accordion-item">
+                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="{{ '#panelsStayOpen-collapseTwo'.$sanitizedIndex }}" aria-expanded="{{ $isExpanded ? 'true' : 'false' }}" aria-controls="{{ '#panelsStayOpen-collapseTwo'.$sanitizedIndex }}">
+                                        &nbsp{{ $indx }}
+                                    </button>
+                                <div id="{{ 'panelsStayOpen-collapseTwo'.$sanitizedIndex }}" class="accordion-collapse collapse {{ $isExpanded ? 'show' : '' }}">
+                                    <div class="card-body" style="overflow-x:auto;">
+                                        <table class="table table-striped table-bordered table-hover">
+                                            <thead>
+                                                <tr>
+                                                    <th style="width:100px;" class="text-center"> No. </th>
+                                                    <th scope="col" class="text-center"> Item Code </th>
+                                                    <th scope="col" class="text-center"> Item Name </th>
+                                                    <th scope="col" class="text-center"> Price </th>
+                                                    <th scope="col" style="width:10%" class="text-center">Action</th>
+                                                </tr>
+                                            </thead>
+                                            <tbody>
+                                                @foreach ($d as $key=>$details)
+                                                    @foreach ($details->detail as $detail)
+                                                    <tr>
+                                                        <td>{{ $key + 1 }}</td>
+                                                        <td>{{ $detail->item_data->item_code }}</td>
+                                                        <td>{{ $detail->item_data->item_name }}</td>
+                                                        <td class="text-end">{{ $detail->price }}</td>
+                                                        <td class="text-center">
+                                                            <a href="{{ './delete/'.$detail->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> Delete</a>
+                                                        </td>
+                                                    </tr>
+                                                    @endforeach
+                                                @endforeach
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    @endforeach
+                @endif
             </div>
         </div>
     </div>

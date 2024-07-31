@@ -3,7 +3,8 @@
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Dashboard'])
     <div class="container-fluid py-4">
-        <div class="row mt-8">
+        <h2 class="mt-7 ms-4">Hello, {{ Auth::user()->name }}</h2>
+        <div class="row mt-4">
             <div class="col-xl-3 col-sm-6 mb-xl-0 mb-4">
                 <div class="card">
                     <div class="card-body p-3">

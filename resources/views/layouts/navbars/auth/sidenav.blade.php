@@ -25,8 +25,9 @@
                 </div>
                 <h6 class="ms-2 text-uppercase text-xs font-weight-bolder opacity-6 mb-0">Transaction</h6>
             </li>
+            @if(Auth::user()->hasAnyPermission(['quotation.index']))
             <li class="nav-item">
-                <a class="nav-link {{ str_contains(request()->url(), 'sales-letter') == true ? 'active' : '' }}" href="#">
+                <a class="nav-link {{ str_contains(request()->url(), 'sales-letter') == true ? 'active' : '' }}" href="{{ route('quotation.index') }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
                     <svg version="1.1" id="Layer_1" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink"
                         viewBox="0 0 512 512" xml:space="preserve">
@@ -98,6 +99,8 @@
                     <span class="nav-link-text ms-1">Quotation</span>
                 </a>
             </li>
+            @endif
+            @if(Auth::user()->hasAnyPermission(['po.index']))
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'puchase-order') == true ? 'active' : '' }}" href="#">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -151,6 +154,8 @@
                     <span class="nav-link-text ms-1">Purchase Order</span>
                 </a>
             </li>
+            @endif
+            @if(Auth::user()->hasAnyPermission(['do.index']))
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'shipment') == true ? 'active' : '' }}" href="#">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -190,6 +195,8 @@
                     <span class="nav-link-text ms-1">Delivery Order</span>
                 </a>
             </li>
+            @endif
+            @if(Auth::user()->hasAnyPermission(['invoice.index']))
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'invoice') == true ? 'active' : '' }}" href="#">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -273,6 +280,7 @@
                     <span class="nav-link-text ms-1">Invoice</span>
                 </a>
             </li>
+            @endif
             {{-- {{ Auth::user()->hasAnyPermission(['master-invoice']) }} --}}
             @if(Auth::user()->hasAnyPermission(['master-company','master-user','item.index']))
             <li class="nav-item mt-3 d-flex align-items-center">
