@@ -9,7 +9,7 @@
                     </script>,
                     {{-- made with <i class="fa fa-heart"></i> by --}}
                     {{-- <a href="https://www.creative-tim.com" class="font-weight-bold" target="_blank">Creative Tim</a> --}}
-                    <a href="#" class="font-weight-bold" target="_blank">MINT Technology</a>
+                    <a href="https://cygnus.id" class="font-weight-bold" target="_blank">CYGNUS tech</a>
                     {{-- &
                     <a href="https://www.updivision.com" class="font-weight-bold" target="_blank">UPDIVISION</a>
                     for a better web. --}}

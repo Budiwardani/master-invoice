@@ -33,12 +33,15 @@ use App\Http\Controllers\PermissionController;
 use App\Http\Controllers\QuickResponseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePlayController;
+use App\Http\Controllers\SalesLetterController;
 use App\Http\Controllers\UserController;
 use App\Models\JudgesHasUser;
 use App\Models\RolePlay;
 use Illuminate\Support\Benchmark;
 
-Route::get('/', function () {return redirect('/dashboard');})->middleware('auth');
+Route::get('/public', function () {
+    return redirect('/dashboard');
+})->middleware('auth');
 	Route::get('/register', [RegisterController::class, 'create'])->middleware('guest')->name('register');
 	Route::post('/register', [RegisterController::class, 'store'])->middleware('guest')->name('register.perform');
 	Route::get('/login', [LoginController::class, 'show'])->middleware('guest')->name('login');
@@ -66,6 +69,15 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/update/{slug}', [UserController::class, 'update'])->name('user.update');
         Route::post('/store', [UserController::class, 'store'])->name('user.store');
     });
+
+    Route::prefix('quotation')->group(function () {
+        Route::get('/index', [SalesLetterController::class, 'index'])->name('quotation.index');
+        Route::get('/edit/{slug}', [SalesLetterController::class, 'edit'])->name('quotation.edit');
+        Route::get('/create', [SalesLetterController::class, 'create'])->name('quotation.create');
+        Route::post('/update/{slug}', [SalesLetterController::class, 'update'])->name('quotation.update');
+        Route::post('/store', [SalesLetterController::class, 'store'])->name('quotation.store');
+    });
+
     Route::prefix('master-company')->group(function () {
         Route::get('/index', [CompanyController::class, 'index'])->name('company.index');
         Route::get('/edit/{slug}', [CompanyController::class, 'edit'])->name('company.edit');
