@@ -34,7 +34,7 @@ class SalesLetterController extends Controller
                     $data[$company->company_name] = $get;
                 }
                 if(!count($get)){
-                    $data = null;
+                    $data = [];
                 }
             }
         }
