@@ -12,81 +12,82 @@
                     </div>
                 </form>
                 @endif
-                {{-- {{ dd($data) }} --}}
-                @if(Auth::user()->getRoleNames()[0] == 'Supplier')
-                <table class="table table-striped table-bordered table-hover" id="example">
-                    <thead>
-                        <tr>
-                            <th style="width:100px;" class="text-center"> No. </th>
-                            <th scope="col" class="text-center"> Item Code </th>
-                            <th scope="col" class="text-center"> Item Name </th>
-                            <th scope="col" class="text-center"> Price </th>
-                            <th scope="col" style="width:10%" class="text-center">Action</th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($data as $index=>$item)
-                        {{ $item }}
-                            @foreach ($item->detail as $detail)
+                @if(count($data))
+                    @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                    <table class="table table-striped table-bordered table-hover" id="example">
+                        <thead>
                             <tr>
-                                <td>{{ $index + 1 }}</td>
-                                <td>{{ $detail->item_data->item_code }}</td>
-                                <td>{{ $detail->item_data->item_name }}</td>
-                                <td class="text-end">{{ $detail->price }}</td>
-                                <td class="text-center">
-                                    <a href="{{ './delete/'.$detail->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> Delete</a>
-                                </td>
+                                <th style="width:100px;" class="text-center"> No. </th>
+                                <th scope="col" class="text-center"> Item Code </th>
+                                <th scope="col" class="text-center"> Item Name </th>
+                                <th scope="col" class="text-center"> Price </th>
+                                <th scope="col" style="width:10%" class="text-center">Action</th>
                             </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data as $index=>$item)
+                            {{ $item }}
+                                @foreach ($item->detail as $detail)
+                                <tr>
+                                    <td>{{ $index + 1 }}</td>
+                                    <td>{{ $detail->item_data->item_code }}</td>
+                                    <td>{{ $detail->item_data->item_name }}</td>
+                                    <td class="text-end">{{ $detail->price }}</td>
+                                    <td class="text-center">
+                                        <a href="{{ './delete/'.$detail->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> Delete</a>
+                                    </td>
+                                </tr>
+                                @endforeach
                             @endforeach
-                        @endforeach
-                    </tbody>
-                </table>
-                @else
-                    @foreach ($data as $indx=>$d)
-                    @php
-                        $sanitizedIndex = preg_replace('/.[ ()=]/', '', $indx);
-                        $isExpanded = ($indx == 0);
-                    @endphp
-                    <div class="accordion" id="accordionPanelsStayOpenExample">
-                        <div class="accordion-item">
+                        </tbody>
+                    </table>
+                    @else
+                        @foreach ($data as $indx=>$d)
+                        @php
+                            $sanitizedIndex = preg_replace('/.[ ()=]/', '', $indx);
+                            $isExpanded = ($indx == 0);
+                        @endphp
+                        <div class="accordion" id="accordionPanelsStayOpenExample">
                             <div class="accordion-item">
-                                    <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="{{ '#panelsStayOpen-collapseTwo'.$sanitizedIndex }}" aria-expanded="{{ $isExpanded ? 'true' : 'false' }}" aria-controls="{{ '#panelsStayOpen-collapseTwo'.$sanitizedIndex }}">
-                                        &nbsp{{ $indx }}
-                                    </button>
-                                <div id="{{ 'panelsStayOpen-collapseTwo'.$sanitizedIndex }}" class="accordion-collapse collapse {{ $isExpanded ? 'show' : '' }}">
-                                    <div class="card-body" style="overflow-x:auto;">
-                                        <table class="table table-striped table-bordered table-hover">
-                                            <thead>
-                                                <tr>
-                                                    <th style="width:100px;" class="text-center"> No. </th>
-                                                    <th scope="col" class="text-center"> Item Code </th>
-                                                    <th scope="col" class="text-center"> Item Name </th>
-                                                    <th scope="col" class="text-center"> Price </th>
-                                                    <th scope="col" style="width:10%" class="text-center">Action</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                @foreach ($d as $key=>$details)
-                                                    @foreach ($details->detail as $detail)
+                                <div class="accordion-item">
+                                        <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="{{ '#panelsStayOpen-collapseTwo'.$sanitizedIndex }}" aria-expanded="{{ $isExpanded ? 'true' : 'false' }}" aria-controls="{{ '#panelsStayOpen-collapseTwo'.$sanitizedIndex }}">
+                                            &nbsp{{ $indx }}
+                                        </button>
+                                    <div id="{{ 'panelsStayOpen-collapseTwo'.$sanitizedIndex }}" class="accordion-collapse collapse {{ $isExpanded ? 'show' : '' }}">
+                                        <div class="card-body" style="overflow-x:auto;">
+                                            <table class="table table-striped table-bordered table-hover">
+                                                <thead>
                                                     <tr>
-                                                        <td>{{ $key + 1 }}</td>
-                                                        <td>{{ $detail->item_data->item_code }}</td>
-                                                        <td>{{ $detail->item_data->item_name }}</td>
-                                                        <td class="text-end">{{ $detail->price }}</td>
-                                                        <td class="text-center">
-                                                            <a href="{{ './delete/'.$detail->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> Delete</a>
-                                                        </td>
+                                                        <th style="width:100px;" class="text-center"> No. </th>
+                                                        <th scope="col" class="text-center"> Item Code </th>
+                                                        <th scope="col" class="text-center"> Item Name </th>
+                                                        <th scope="col" class="text-center"> Price </th>
+                                                        <th scope="col" style="width:10%" class="text-center">Action</th>
                                                     </tr>
+                                                </thead>
+                                                <tbody>
+                                                    @foreach ($d as $key=>$details)
+                                                        @foreach ($details->detail as $detail)
+                                                        <tr>
+                                                            <td>{{ $key + 1 }}</td>
+                                                            <td>{{ $detail->item_data->item_code }}</td>
+                                                            <td>{{ $detail->item_data->item_name }}</td>
+                                                            <td class="text-end">{{ $detail->price }}</td>
+                                                            <td class="text-center">
+                                                                <a href="{{ './delete/'.$detail->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> Delete</a>
+                                                            </td>
+                                                        </tr>
+                                                        @endforeach
                                                     @endforeach
-                                                @endforeach
-                                            </tbody>
-                                        </table>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                     </div>
                                 </div>
                             </div>
                         </div>
-                    </div>
-                    @endforeach
+                        @endforeach
+                    @endif
                 @endif
             </div>
         </div>
