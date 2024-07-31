@@ -24,5 +24,17 @@ class UserTableSeeder extends Seeder
             'password'  => 'secret',
             'encrypted_id' => 'e10adc3949ba59abbe56e057f20f883e'
         ]);
+
+        //get all permissions
+        $permissions = Permission::all();
+
+        //get role admin
+        $role = Role::find(1);
+
+        //assign permission to role
+        $role->syncPermissions($permissions);
+
+        //assign role to user
+        $user->assignRole($role);
     }
 }

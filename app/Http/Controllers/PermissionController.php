@@ -16,7 +16,7 @@ class PermissionController extends Controller
             $user_id = auth()->user()->id;
         }
         $permissions = Permission::get();
-        // dd($permissions);
+        $a = '';
 
         return view('pages.permissions.index',[
             'data'      => $permissions,

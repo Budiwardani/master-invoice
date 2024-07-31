@@ -22,9 +22,9 @@ class RoleController extends Controller
         $rolenames = $user->getRoleNames();
         $roles = Role::all();
 
-            return view('pages.roles.index',[
-                'data'      => $roles,
-            ]);
+        return view('pages.roles.index',[
+            'data'      => $roles,
+        ]);
     }
 
     /**

@@ -282,6 +282,7 @@
             </li>
             @endif
             {{-- {{ Auth::user()->getRoleNames }} --}}
+            @if(Auth::user()->hasAnyPermission(['master-user']))
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'user') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'user/index']) }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -293,6 +294,8 @@
                     <span class="nav-link-text ms-1">Master User</span>
                 </a>
             </li>
+            @endif
+            @if(Auth::user()->hasAnyPermission(['master-company']))
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'master-company') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'master-company/index']) }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -329,6 +332,8 @@
                     <span class="nav-link-text ms-1">Master Company</span>
                 </a>
             </li>
+            @endif
+            @if(Auth::user()->hasAnyPermission(['item.index']))
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'master-item') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'master-item/index']) }}">
                     <div class="icon icon-shape icon-sm border-radius-md text-center me-2 d-flex align-items-center justify-content-center">
@@ -505,6 +510,8 @@
                     <span class="nav-link-text ms-1">Master Item</span>
                 </a>
             </li>
+            @endif
+            @if(Auth::user()->getRoleNames()[0] == 'Dev')
             <li class="nav-item">
                 <a class="nav-link {{ str_contains(request()->url(), 'role') == true ? 'active' : '' }}" href="{{ route('page', ['page' => 'role/index']) }}">
                     <div
@@ -532,22 +539,7 @@
                     <span class="nav-link-text ms-1">Setup</span>
                 </a>
             </li>
+            @endif
         </ul>
     </div>
-    {{-- <div class="sidenav-footer mx-3 "> --}}
-        {{-- <div class="card card-plain shadow-none" id="sidenavCard">
-            <img class="w-50 mx-auto" src="/img/illustrations/icon-documentation-warning.svg"
-                alt="sidebar_illustration">
-            <div class="card-body text-center p-3 w-100 pt-0">
-                <div class="docs-info">
-                    <h6 class="mb-0">Need help?</h6>
-                    <p class="text-xs font-weight-bold mb-0">Please check our docs</p>
-                </div>
-            </div>
-        </div> --}}
-        {{-- <a href="/docs/bootstrap/overview/argon-dashboard/index.html" target="_blank"
-            class="btn btn-dark btn-sm w-100 mb-3">Documentation</a>
-        <a class="btn btn-primary btn-sm mb-0 w-100"
-            href="https://www.creative-tim.com/product/argon-dashboard-pro-laravel" target="_blank" type="button">Upgrade to PRO</a> --}}
-    {{-- </div> --}}
 </aside>

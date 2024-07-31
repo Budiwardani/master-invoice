@@ -31,7 +31,6 @@
                             <td>{{ $item->company->company_name }}</td>
                             <td class="text-center">
                                 <a href="{{ './edit/'.$item->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> EDIT</a>
-                                    {{-- <a href="{{ route('user.edit', $u->slug) }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> EDIT</a> --}}
                             </td>
                         </tr>
                         @endforeach
