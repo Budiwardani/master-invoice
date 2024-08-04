@@ -68,7 +68,7 @@ class SalesLetterController extends Controller
      */
     public function store(Request $request)
     {
-        dd($request);
+        // dd($request);
         $encrypted_id   = md5($request->ref_no.Carbon::now());
         $input = SalesLetter::create([
             'ref_number'    => $request->ref_no,
