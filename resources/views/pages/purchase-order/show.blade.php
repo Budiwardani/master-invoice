@@ -75,7 +75,7 @@
                             @endforeach
                         </tbody>
                     </table>
-                    @if($data->status == 'opem')
+                    @if($data->status == 'open')
                     <div class="row mt-3">
                         <div class="col-12 text-end">
                             <button class="btn btn-success shadow-sm rounded-sm" type="submit">Create Delivery Order</button>
