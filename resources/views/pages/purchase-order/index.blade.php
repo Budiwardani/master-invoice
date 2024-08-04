@@ -14,10 +14,12 @@
                             <th scope="col" class="text-center"> Create Date </th>
                             <th scope="col" class="text-center"> Status </th>
                             {{-- <th scope="col" class="text-center"> Company </th> --}}
-                            @if(is_null($data[0]->credit_terms_id) || is_null($data[0]->due_date))
-                                <th scope="col" style="width:10%" class="text-center">Action</th>
-                            @else
-                                <th scope="col" class="text-center">Due Date</th>
+                            @if($data)
+                                @if(is_null($data[0]->credit_terms_id) || is_null($data[0]->due_date))
+                                    <th scope="col" style="width:10%" class="text-center">Action</th>
+                                @else
+                                    <th scope="col" class="text-center">Due Date</th>
+                                @endif
                             @endif
                         </tr>
                     </thead>
@@ -28,6 +30,7 @@
                             <td> <a href="{{ './show/'.$item->random_id }}"> {{ $item->ref_number }}</a></td>
                             <td class="text-center">{{ formatDate($item->date) }}</td>
                             <td class="text-center">{{ $item->current_status }}</td>
+                            @if($data)
                             <td class="text-center">
                                 @if(is_null($item->credit_terms_id) || is_null($item->due_date))
                                     <a href="{{ './create/'.$item->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> EDIT</a>
@@ -35,6 +38,7 @@
                                     {{ $item->due_date }}
                                 @endif
                             </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>
