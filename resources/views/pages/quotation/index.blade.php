@@ -21,20 +21,23 @@
                                 <th scope="col" class="text-center"> Item Code </th>
                                 <th scope="col" class="text-center"> Item Name </th>
                                 <th scope="col" class="text-center"> Price </th>
+                                <th scope="col" class="text-center"> Status </th>
                                 <th scope="col" style="width:10%" class="text-center">Action</th>
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data as $index=>$item)
-                            {{ $item }}
                                 @foreach ($item->detail as $detail)
                                 <tr>
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $detail->item_data->item_code }}</td>
                                     <td>{{ $detail->item_data->item_name }}</td>
                                     <td class="text-end">{{ $detail->price }}</td>
+                                    <td class="text-center">{{ $item->current_status }}</td>
                                     <td class="text-center">
-                                        <a href="{{ './delete/'.$detail->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> Delete</a>
+                                        @if($item->current_status == 'waiting')
+                                        <a href="{{ './delete/'.$item->random_id }}" class="btn btn-danger btn-sm me-2"><i class="fa fa-trash-alt me-1"></i> Delete</a>
+                                        @endif
                                     </td>
                                 </tr>
                                 @endforeach
@@ -47,7 +50,7 @@
                             $sanitizedIndex = preg_replace('/.[ ()=]/', '', $indx);
                             $isExpanded = ($indx == 0);
                         @endphp
-                        <div class="accordion" id="accordionPanelsStayOpenExample">
+                        <div class="accordion mb-2" id="accordionPanelsStayOpenExample">
                             <div class="accordion-item">
                                 <div class="accordion-item">
                                         <button class="accordion-button collapsed" type="button" data-bs-toggle="collapse" data-bs-target="{{ '#panelsStayOpen-collapseTwo'.$sanitizedIndex }}" aria-expanded="{{ $isExpanded ? 'true' : 'false' }}" aria-controls="{{ '#panelsStayOpen-collapseTwo'.$sanitizedIndex }}">
@@ -55,32 +58,44 @@
                                         </button>
                                     <div id="{{ 'panelsStayOpen-collapseTwo'.$sanitizedIndex }}" class="accordion-collapse collapse {{ $isExpanded ? 'show' : '' }}">
                                         <div class="card-body" style="overflow-x:auto;">
-                                            <table class="table table-striped table-bordered table-hover">
-                                                <thead>
-                                                    <tr>
-                                                        <th style="width:100px;" class="text-center"> No. </th>
-                                                        <th scope="col" class="text-center"> Item Code </th>
-                                                        <th scope="col" class="text-center"> Item Name </th>
-                                                        <th scope="col" class="text-center"> Price </th>
-                                                        <th scope="col" style="width:10%" class="text-center">Action</th>
-                                                    </tr>
-                                                </thead>
-                                                <tbody>
-                                                    @foreach ($d as $key=>$details)
+                                            @foreach ($d as $key=>$details)
+                                            <form role="form" method="post" action="{{ route('po.store') }}">
+                                                @csrf
+                                                Quotation : {{ $details->ref_number }}
+                                                <table class="table table-striped table-bordered table-hover mb-2">
+                                                    <thead>
+                                                        <tr>
+                                                            {{-- <th style="width:100px;" class="text-center"> No. </th> --}}
+                                                            <th scope="col" class="text-center"> Item Code </th>
+                                                            <th scope="col" class="text-center"> Item Name </th>
+                                                            <th scope="col" class="text-center"> Price </th>
+                                                            <th scope="col" style="width:10%" class="text-center">Action</th>
+                                                        </tr>
+                                                    </thead>
+                                                    <tbody>
                                                         @foreach ($details->detail as $detail)
                                                         <tr>
-                                                            <td>{{ $key + 1 }}</td>
+                                                            {{-- <td>{{ $key + 1 }}</td> --}}
                                                             <td>{{ $detail->item_data->item_code }}</td>
                                                             <td>{{ $detail->item_data->item_name }}</td>
                                                             <td class="text-end">{{ $detail->price }}</td>
                                                             <td class="text-center">
-                                                                <a href="{{ './delete/'.$detail->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> Delete</a>
+                                                                <input type="checkbox" name="items[]" value="{{$detail->item_data->id}}/{{ $detail->price }}">
                                                             </td>
                                                         </tr>
                                                         @endforeach
-                                                    @endforeach
-                                                </tbody>
-                                            </table>
+                                                    </tbody>
+                                                </table>
+                                                <div class="row mt-3">
+                                                    <input value="{{ $d[0]->company_id }}" name="company_id" type="hidden">
+                                                    <input value="{{ $details->random_id }}" name="ref_number" type="hidden">
+                                                    <div class="col-12">
+                                                        <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
+                                                        <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
+                                                    </div>
+                                                </div>
+                                            </form>
+                                            @endforeach
                                         </div>
                                     </div>
                                 </div>

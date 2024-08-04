@@ -29,7 +29,7 @@ class SalesLetterController extends Controller
         } else {
             $companies = Company::where('company_type','supplier')->get();
             foreach($companies as $company){
-                $get = SalesLetter::with('detail.item_data')->where('company_id',$company->id)->get();
+                $get = SalesLetter::with('detail.item_data')->where('company_id',$company->id)->where('current_status','waiting')->get();
                 if(count($get)){
                     $data[$company->company_name] = $get;
                 }
@@ -50,7 +50,14 @@ class SalesLetterController extends Controller
      */
     public function create()
     {
-        $data = Item::where('company_id',Auth::user()->company_id)->get();
+        $array_item = array();
+        $get = SalesLetter::with('detail.item_data')->where('company_id',Auth::user()->company_id)->where('current_status','waiting')->get();
+        foreach($get as $qoutation){
+            foreach($qoutation->detail as $data){
+                array_push($array_item,$data->item_id);
+            }
+        }
+        $data = Item::where('company_id',Auth::user()->company_id)->whereNotIn('id',$array_item)->get();
         return view('pages.quotation.create',[
             'datas'      => $data,
         ]);
@@ -61,6 +68,7 @@ class SalesLetterController extends Controller
      */
     public function store(Request $request)
     {
+        dd($request);
         $encrypted_id   = md5($request->ref_no.Carbon::now());
         $input = SalesLetter::create([
             'ref_number'    => $request->ref_no,
@@ -77,7 +85,7 @@ class SalesLetterController extends Controller
                         SalesLetterDetail::create([
                             'sales_leter_id'=> $input->id,
                             'item_id'       => $item,
-                            'price'         => $price
+                            'price'         => str_replace(",","",$price)
                         ]);
                     }
                 }
@@ -114,8 +122,14 @@ class SalesLetterController extends Controller
     /**
      * Remove the specified resource from storage.
      */
-    public function destroy(SalesLetter $salesLetter)
+    public function destroy($random_id)
     {
-        //
+        // dd($random_id);
+        $data = SalesLetter::where('random_id',$random_id)->first();
+        $delete = $data->update([
+            'current_status' => 'closed'
+        ]);
+
+        return redirect('quotation/index')->with('success','deleted');
     }
 }

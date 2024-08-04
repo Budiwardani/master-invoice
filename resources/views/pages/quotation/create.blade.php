@@ -1,7 +1,7 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Edit Management'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Create Quotation'])
     <div class="card shadow-lg mx-4 mt-8" id="user_info">
         <div class="card-body p-3">
             <div class="row gx-4">
@@ -28,7 +28,7 @@
                             <div class="col-md-4">
                                 <div class="mb-3">
                                     <label class="fw-bold">Price</label>
-                                    <input class="form-control" value="" name="price[]" type="number" placeholder="Price" inputmode="numeric">
+                                    <input class="form-control price" value="" name="price[]" type="text" placeholder="Price" inputmode="numeric" onkeyup="format_num_array('price')">
                                 </div>
                             </div>
                             {{-- <div class="col-md-2 align-center">
@@ -191,7 +191,7 @@
         selectHTML += `<div class="col-md-4">
                 <div class="mb-3">
                     <label class="fw-bold">Price</label>
-                    <input class="form-control" value="" name="price[]" type="number" placeholder="Price" inputmode="numeric">
+                    <input class="form-control price" value="" name="price[]" type="text" placeholder="Price" inputmode="numeric" onkeyup="format_num_array('price')">
                 </div>
             </div>`;
         // selectHTML += `<div class="col-md-2 align-center">

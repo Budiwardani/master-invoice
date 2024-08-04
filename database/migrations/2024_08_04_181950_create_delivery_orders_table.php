@@ -11,13 +11,13 @@ return new class extends Migration
      */
     public function up(): void
     {
-        Schema::create('sales_letters', function (Blueprint $table) {
+        Schema::create('delivery_orders', function (Blueprint $table) {
             $table->id();
-            $table->string('ref_number');
-            $table->integer('company_id');
-            $table->integer('created_by');
-            $table->date('due_date');
-            $table->enum('current_status',['waiting','approved','decline','closed']);
+            $table->string('delivery_number')->nullable();
+            $table->integer('purchase_order_id');
+            $table->enum('current_status',['on delivery', 'arrived']);
+            $table->date('etd')->nullable();
+            $table->date('eta')->nullable();
             $table->string('random_id');
             $table->timestamps();
         });
@@ -28,6 +28,6 @@ return new class extends Migration
      */
     public function down(): void
     {
-        Schema::dropIfExists('sales_letters');
+        Schema::dropIfExists('delivery_orders');
     }
 };

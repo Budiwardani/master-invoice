@@ -27,13 +27,16 @@ use App\Http\Controllers\ResetPassword;
 use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\ChoiceTestController;
 use App\Http\Controllers\CompanyController;
+use App\Http\Controllers\DeliveryOrderController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\JudgesHasUserController;
 use App\Http\Controllers\PermissionController;
+use App\Http\Controllers\PurchaseOrderController;
 use App\Http\Controllers\QuickResponseController;
 use App\Http\Controllers\RoleController;
 use App\Http\Controllers\RolePlayController;
 use App\Http\Controllers\SalesLetterController;
+use App\Http\Controllers\TermController;
 use App\Http\Controllers\UserController;
 use App\Models\JudgesHasUser;
 use App\Models\RolePlay;
@@ -76,6 +79,27 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create', [SalesLetterController::class, 'create'])->name('quotation.create');
         Route::post('/update/{slug}', [SalesLetterController::class, 'update'])->name('quotation.update');
         Route::post('/store', [SalesLetterController::class, 'store'])->name('quotation.store');
+        Route::get('/delete/{slug}', [SalesLetterController::class, 'destroy'])->name('quotation.delete');
+    });
+
+    Route::prefix('purchase-order')->group(function () {
+        Route::get('/index', [PurchaseOrderController::class, 'index'])->name('po.index');
+        Route::get('/edit/{slug}', [PurchaseOrderController::class, 'edit'])->name('po.edit');
+        Route::get('/show/{slug}', [PurchaseOrderController::class, 'show'])->name('po.show');
+        Route::get('/create/{slug}', [PurchaseOrderController::class, 'create'])->name('po.create');
+        Route::post('/update/{slug}', [PurchaseOrderController::class, 'update'])->name('po.update');
+        Route::post('/store', [PurchaseOrderController::class, 'store'])->name('po.store');
+        Route::post('/save/{slug}', [PurchaseOrderController::class, 'save'])->name('po.save');
+    });
+
+    Route::prefix('delivery-order')->group(function () {
+        Route::get('/index', [DeliveryOrderController::class, 'index'])->name('do.index');
+        Route::get('/show/{slug}', [DeliveryOrderController::class, 'show'])->name('do.show');
+        Route::get('/edit/{slug}', [DeliveryOrderController::class, 'edit'])->name('do.edit');
+        Route::get('/create/{slug}', [DeliveryOrderController::class, 'create'])->name('do.create');
+        Route::post('/update/{slug}', [DeliveryOrderController::class, 'update'])->name('do.update');
+        Route::post('/store', [DeliveryOrderController::class, 'store'])->name('do.store');
+        Route::post('/save/{slug}', [DeliveryOrderController::class, 'save'])->name('do.save');
     });
 
     Route::prefix('master-company')->group(function () {
@@ -111,5 +135,14 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/store',           [PermissionController::class, 'store'])->name('permission.store');
         Route::post('/update/{slug}',   [PermissionController::class, 'update'])->name('permission.update');
         Route::get('/show',             [PermissionController::class, 'show'])->name('permission.show');
+    });
+
+    Route::prefix('master-terms')->group(function () {
+        Route::get('/index',            [TermController::class, 'index'])->name('term.index');
+        Route::get('/create',           [TermController::class, 'create'])->name('term.create');
+        Route::get('/edit/{slug}',      [TermController::class, 'edit'])->name('term.edit');
+        Route::post('/store',           [TermController::class, 'store'])->name('term.store');
+        Route::post('/update/{slug}',   [TermController::class, 'update'])->name('term.update');
+        Route::get('/show',             [TermController::class, 'show'])->name('term.show');
     });
 });

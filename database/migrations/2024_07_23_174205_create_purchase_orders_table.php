@@ -18,8 +18,8 @@ return new class extends Migration
             $table->integer('sales_letter_id');
             $table->string('revision',3);
             $table->enum('current_status',['open', 'approved', 'decline']);
-            $table->integer('credit_terms_id');
-            $table->date('due_date');
+            $table->integer('credit_terms_id')->nullable();
+            $table->date('due_date')->nullable();
             $table->integer('created_by');
             $table->string('random_id');
             $table->timestamps();
