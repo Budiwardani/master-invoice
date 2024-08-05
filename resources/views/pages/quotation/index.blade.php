@@ -46,6 +46,7 @@
                     </table>
                     @else
                         @foreach ($data as $indx=>$d)
+                        @if(count($d))
                         @php
                             $sanitizedIndex = preg_replace('/.[ ()=]/', '', $indx);
                             $isExpanded = ($indx == 0);
@@ -102,6 +103,7 @@
                             </div>
                         </div>
                         @endforeach
+                        @endif
                     @endif
                 @endif
             </div>
