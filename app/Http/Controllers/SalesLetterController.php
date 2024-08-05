@@ -34,11 +34,10 @@ class SalesLetterController extends Controller
                     $data[$company->company_name] = $get;
                 }
                 if(!count($get)){
-                    $data = [];
+                    $data[$company->company_name] = [];
                 }
             }
         }
-        // dd($data);
 
         return view('pages.quotation.index',[
             'data'      => $data,
