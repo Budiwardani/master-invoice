@@ -20,6 +20,7 @@
                                 <th style="width:100px;" class="text-center"> No. </th>
                                 <th scope="col" class="text-center"> Item Code </th>
                                 <th scope="col" class="text-center"> Item Name </th>
+                                <th scope="col" class="text-center"> Quantity </th>
                                 <th scope="col" class="text-center"> Price </th>
                                 <th scope="col" class="text-center"> Status </th>
                                 <th scope="col" style="width:10%" class="text-center">Action</th>
@@ -32,8 +33,26 @@
                                     <td>{{ $index + 1 }}</td>
                                     <td>{{ $detail->item_data->item_code }}</td>
                                     <td>{{ $detail->item_data->item_name }}</td>
-                                    <td class="text-end">{{ $detail->price }}</td>
-                                    <td class="text-center">{{ $item->current_status }}</td>
+                                    <td class="text-end">{{ formatNumber($detail->quantity) }}</td>
+                                    <td class="text-end">{{ formatNumber($detail->price) }}</td>
+                                    <td class="text-center">
+                                        @php
+                                            switch($item->current_status ){
+                                                case 'approved' :
+                                                    echo '<span class="badge bg-success shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
+                                                break;
+                                                case 'decline' :
+                                                    echo '<span class="badge bg-danger shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
+                                                break;
+                                                case 'close' :
+                                                    echo '<span class="badge bg-warning shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
+                                                break;
+                                                default :
+                                                    echo '<span class="badge bg-primary shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
+                                                break;
+                                            }
+                                        @endphp
+                                    </td>
                                     <td class="text-center">
                                         @if($item->current_status == 'waiting')
                                         <a href="{{ './delete/'.$item->random_id }}" class="btn btn-danger btn-sm me-2"><i class="fa fa-trash-alt me-1"></i> Delete</a>
@@ -69,6 +88,7 @@
                                                             {{-- <th style="width:100px;" class="text-center"> No. </th> --}}
                                                             <th scope="col" class="text-center"> Item Code </th>
                                                             <th scope="col" class="text-center"> Item Name </th>
+                                                            <th scope="col" class="text-center"> Quantity </th>
                                                             <th scope="col" class="text-center"> Price </th>
                                                             <th scope="col" style="width:10%" class="text-center">Action</th>
                                                         </tr>
@@ -79,7 +99,8 @@
                                                             {{-- <td>{{ $key + 1 }}</td> --}}
                                                             <td>{{ $detail->item_data->item_code }}</td>
                                                             <td>{{ $detail->item_data->item_name }}</td>
-                                                            <td class="text-end">{{ $detail->price }}</td>
+                                                            <td class="text-end">{{ formatNumber($detail->quantity) }}</td>
+                                                            <td class="text-end">{{ formatNumber($detail->price) }}</td>
                                                             <td class="text-center">
                                                                 <input type="checkbox" name="items[]" value="{{$detail->item_data->id}}/{{ $detail->price }}">
                                                             </td>

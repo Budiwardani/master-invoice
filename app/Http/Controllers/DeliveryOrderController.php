@@ -22,21 +22,54 @@ class DeliveryOrderController extends Controller
         foreach($role_name->roles as $role){
             array_push($roles_array,$role->name);
         }
+        $return_arr = array();
 
         if(in_array('Supplier',$roles_array)){
             $company_id = $role_name->company_id;
-            $data = DeliveryOrder::with('detail.item_data','purchaseOrder.quotation.company')
+            $data = DeliveryOrder::with('detail.item_data','purchaseOrder.detail','purchaseOrder.quotation.company','invoice')
             ->whereHas('purchaseOrder.quotation',function ($query) use ($company_id) {
                 return $query->where('company_id',$company_id);
             })
             ->get();
         } else {
-            $data = DeliveryOrder::with('detail.item_data','purchaseOrder.quotation.company')->get();
+            $data = DeliveryOrder::with('detail.item_data','purchaseOrder.detail','purchaseOrder.quotation.company','invoice')->get();
         }
-        // $data = DeliveryOrder::with('detail.item_data','purchaseOrder.quotation.company')->get();
+        foreach($data as $row_data) {
+            $delivered = '';
+            $invoice = 'none';
+            foreach($row_data->purchaseOrder->detail as $po_detail){
+                foreach($row_data->detail as $data_detail){
+                    if($data_detail->item_id == $po_detail->item_id) {
+                        if($data_detail->quantity == $po_detail->quantity) {
+                            if($delivered != 'part') {
+                                $delivered = 'done';
+                            }
+                        } else {
+                            $delivered = 'part';
+                        }
+                    }
+                }
+            }
+            if(!$row_data->invoice == null){
+                $invoice = 'exist';
+            }
+            array_push($return_arr,[
+                'company_name'      => $row_data->purchaseOrder->quotation->company->company_name,
+                'delivery_number'   => $row_data->delivery_number,
+                'date'              => $row_data->date,
+                'etd'               => $row_data->etd,
+                'eta'               => $row_data->eta,
+                'current_status'    => $row_data->current_status,
+                'random_id'         => $row_data->random_id,
+                'delivered'         => $delivered,
+                'invoice'           => $invoice,
+            ]);
+        }
+
+        // dd($return_arr);
 
         return view('pages.delivery-order.index',[
-            'data'      => $data,
+            'data'      => $return_arr,
         ]);
     }
 

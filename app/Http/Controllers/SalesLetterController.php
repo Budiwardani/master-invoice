@@ -67,7 +67,15 @@ class SalesLetterController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
+        // $a = '';
+        // foreach($request->input as $index=>$input) {
+        //     $a .= $index.' = (';
+        //     foreach($input as $key=>$data) {
+        //         $a .= $key.' = '.$input[$key].', ';
+        //     }
+        //     $a .= ')';
+        // }
+        // dd($a,$request);
         $encrypted_id   = md5($request->ref_no.Carbon::now());
         $input = SalesLetter::create([
             'ref_number'    => $request->ref_no,
@@ -78,16 +86,27 @@ class SalesLetterController extends Controller
             'random_id'     => $encrypted_id
         ]);
         if($input){
-            foreach($request->options as $key=>$item){
-                foreach($request->price as $index=>$price){
-                    if($key == $index){
-                        SalesLetterDetail::create([
-                            'sales_leter_id'=> $input->id,
-                            'item_id'       => $item,
-                            'price'         => str_replace(",","",$price)
-                        ]);
-                    }
-                }
+            // foreach($request->options as $key=>$item){
+            //     foreach($request->price as $index=>$price){
+            //         if($key == $index){
+            //             SalesLetterDetail::create([
+            //                 'sales_leter_id'=> $input->id,
+            //                 'item_id'       => $item,
+            //                 'price'         => str_replace(",","",$price)
+            //             ]);
+            //         }
+            //     }
+            // }
+
+            foreach($request->input as $index=>$inputs) {
+                // foreach($inputs as $key=>$data) {
+                    SalesLetterDetail::create([
+                        'sales_leter_id'=> $input->id,
+                        'item_id'       => $inputs['item_code'],
+                        'quantity'      => $inputs['quantity'],
+                        'price'         => str_replace(",","",$inputs['price'])
+                    ]);
+                // }
             }
 
             return redirect('quotation/index')->with('success','created');

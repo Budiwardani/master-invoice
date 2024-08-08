@@ -7,14 +7,36 @@
             <div class="row gx-4">
                 <form role="form" method="post" action="{{ route('quotation.store') }}">
                     @csrf
-                    <div class="col-md-6"><button type="button" class="btn btn-success mt-2" onclick="addRow()"><i class="fa fa-plus me-2"></i>Add Row</button></div>
+                    <div class="col-md-6"><button type="button" class="btn btn-success mt-2" id="add-row"><i class="fa fa-plus me-2"></i>Add Row</button></div>
                     <div class="row">
                         <div class="col-md-6"><label class="fw-bold">Due Date</label><input class="form-control" value="" name="due_date" type="date" placeholder="Ref Number" inputmode="numeric"></div>
                         <div class="col-md-6"><label class="fw-bold">Ref No</label><input class="form-control" value="" name="ref_no" type="text" placeholder="Ref Number" inputmode="numeric"></div>
                     </div>
                     <div id="input-container">
-                        <div id="rows-container">
-                            <!-- Rows will be dynamically added here -->
+                        <div class="row">
+                            <div class="col-md-6">
+                                <div class="mb-3">
+                                    <label class="fw-bold">Item Name</label>
+                                    <select name="input[0][item_code]" class="form-control">
+                                        <option value="">Select One</option>
+                                        @foreach ($datas as $option)
+                                            <option value="{{ $option->id }}">[{{ $option->item_code }}] {{ $option->item_name }}</option>
+                                        @endforeach
+                                    </select>
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="fw-bold">Quantity</label>
+                                    <input class="form-control price" value="" name="input[0][quantity]" type="text" placeholder="Quantity" inputmode="numeric" onkeyup="format_num_array('price')">
+                                </div>
+                            </div>
+                            <div class="col-md-3">
+                                <div class="mb-3">
+                                    <label class="fw-bold">Price</label>
+                                    <input class="form-control price" value="" name="input[0][price]" type="text" placeholder="Price" inputmode="numeric" onkeyup="format_num_array('price')">
+                                </div>
+                            </div>
                         </div>
                     </div>
                     <div class="row mt-3">
@@ -131,54 +153,41 @@
         }
     </style>
 <script>
-    let rowCount = 0;
+    // JavaScript to handle adding new rows
+    const datas = <?php echo json_encode($datas); ?>; // Pass PHP array to JavaScript
 
-    function addRow() {
-        const container = document.getElementById('input-container');
-        const row = document.createElement('div');
-        row.className = 'row mb-3';
-        row.innerHTML = `
-            <div class="col-md-4">
-                <div class="mb-3">
-                    <label class="fw-bold">Item Name</label>
-                    <select name="input[${rowCount}][item_code]" class="form-control">
-                        <option value="">Select One</option>
-                        @foreach ($datas as $option)
-                            <option value="{{ $option->id }}">[{{ $option->item_code }}] {{ $option->item_name }}</option>
-                        @endforeach
-                    </select>
-                </div>
-            </div>
+    document.getElementById('add-row').addEventListener('click', function() {
+        const inputContainer = document.getElementById('input-container');
+        const newRow = document.createElement('div');
+        newRow.classList.add('row');
+        let selectHTML = `<div class="col-md-6"><div class="mb-3"><label class="fw-bold">Item Name</label>
+                <select name="input[][item_code]" class="form-control">
+                    <option value="">Select One</option>`;
+        datas.forEach(option => {
+            selectHTML += `<option value="${option.id}">[${option.item_code}] ${option.item_name}</option>`;
+        });
+        selectHTML += '</select></div></div>';
+        selectHTML += `
             <div class="col-md-3">
                 <div class="mb-3">
-                    <label class="fw-bold">Quantity</label>
-                    <input class="form-control price" name="input[${rowCount}][quantity]" type="text" placeholder="Quantity" inputmode="numeric" onkeyup="format_num_array('price')">
+                    <label class="fw-bold">Price</label>
+                    <input class="form-control price" value="" name="input[][quantity]" type="text" placeholder="Price" inputmode="numeric" onkeyup="format_num_array('price')">
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="mb-3">
                     <label class="fw-bold">Price</label>
-                    <input class="form-control price" name="input[${rowCount}][price]" type="text" placeholder="Price" inputmode="numeric" onkeyup="format_num_array('price')">
+                    <input class="form-control price" value="" name="input[][price]" type="text" placeholder="Price" inputmode="numeric" onkeyup="format_num_array('price')">
                 </div>
-            </div>
-            <div class="col-md-2">
-                <div class="mb-3">
-                    <label class="fw-bold">Remove</label>
-                    <div>
-                        <button type="button" class="btn btn-danger" onclick="removeRow(this)"><i class="fa fa-trash me-2"></i>Remove Row</button>
-                    </div>
-                </div>
-            </div>
-        `;
-        container.appendChild(row);
-        rowCount++;
-    }
+            </div>`;
+        newRow.innerHTML = `${selectHTML}`;
+        inputContainer.appendChild(newRow);
+    });
 
+    // JavaScript to handle removing a row
     function removeRow(button) {
-        const row = button.closest('.row');
-        if (row) {
-            row.parentNode.removeChild(row);
-        }
+        const row = button.parentNode;
+        row.parentNode.removeChild(row);
     }
 </script>
 

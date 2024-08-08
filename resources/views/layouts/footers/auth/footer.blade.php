@@ -70,7 +70,7 @@
 
     function format_num_array(className) {
         var elements = document.querySelectorAll('.' + className);
-
+        // console.log(elements);
         // Iterate over each element
         elements.forEach(function(element) {
             var number = element.value;
@@ -90,22 +90,6 @@
                 element.value = '';
             }
         });
-        // var number = $element.val();
-
-        // // Remove non-digit characters (except for decimal points if needed)
-        // var cleanedNumber = number.replace(/[^0-9.]/g, '');
-
-        // // Parse the cleaned number as a float
-        // var parsedNumber = parseFloat(cleanedNumber);
-
-        // // Check if parsedNumber is a valid number
-        // if (!isNaN(parsedNumber)) {
-        //     // Format the number with commas
-        //     $element.val(parsedNumber.toLocaleString());
-        // } else {
-        //     // If not a valid number, set the value to an empty string or handle as needed
-        //     $element.val('');
-        // }
     }
 </script>
 <style>

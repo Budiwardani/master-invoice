@@ -15,13 +15,10 @@ return new class extends Migration
             $table->id();
             $table->integer('purchase_order_id');
             $table->integer('sales_leter_id');
-            $table->string('date');
+            $table->string('delivery_order_id');
             $table->string('invoice_number')->nullable();
-            $table->string('shipping_number');
-            $table->enum('shipping_status', ['on shipping','received','return','decline']);
-            $table->integer('termin');
-            $table->string('periode');
-            $table->date('due_date');
+            $table->date('date');
+            $table->date('due_date')->nullable();
             $table->integer('sub_total');
             $table->integer('discount');
             $table->integer('total');

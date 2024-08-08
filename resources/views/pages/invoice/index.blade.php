@@ -1,7 +1,7 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Delivery Order'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Invoice'])
     <div class="card shadow-lg mx-4 mt-8" id="user_info">
         <div class="card-body p-3">
             <div class="row gx-4">
@@ -12,50 +12,34 @@
                             @if(Auth::user()->getRoleNames()[0] != 'Supplier')
                                 <th scope="col" class="text-center"> Supplier </th>
                             @endif
+                            <th scope="col" class="text-center"> Invoice Number </th>
+                            <th scope="col" class="text-center"> Quotation Number </th>
+                            <th scope="col" class="text-center"> Purchase Order Number </th>
                             <th scope="col" class="text-center"> Delivery Number </th>
                             <th scope="col" class="text-center"> Create Date </th>
-                            <th scope="col" class="text-center"> ETD </th>
-                            <th scope="col" class="text-center"> ETA </th>
-                            <th scope="col" class="text-center"> Status </th>
-                            @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                            {{-- @if(Auth::user()->getRoleNames()[0] == 'Supplier') --}}
                                 <th scope="col" class="text-center"> Action </th>
-                            @endif
+                            {{-- @endif --}}
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($data as $index=>$item)
+                        {{-- {{ dd($item) }} --}}
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 @if(Auth::user()->getRoleNames()[0] != 'Supplier')
-                                    <td> {{ $item['company_name'] }} </td>
+                                    <td> {{ $item->quotation->company->company_name }} </td>
                                 @endif
-                                <td> <a href="{{ './show/'.$item['random_id'] }}"> {{ $item['delivery_number'] }}</a></td>
-                                <td class="text-center">{{ formatDate($item['date']) }}</td>
-                                <td class="text-center">{{ formatDate($item['etd']) }}</td>
-                                <td class="text-center">{{ formatDate($item['eta']) }}</td>
-                                <td class="text-center">
-                                    @php
-                                        switch($item['delivered'] ){
-                                            case 'done' :
-                                                echo '<span class="badge bg-success shadow border-0 ms-2 mb-2">Arived</span>';
-                                            break;
-                                            default :
-                                                echo '<span class="badge bg-warning shadow border-0 ms-2 mb-2">partially sent</span>';
-                                            break;
-                                        }
-                                    @endphp
-                                </td>
-                                @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                <td class="text-center">{!! ($item['invoice_number'] ? $item['invoice_number'] : '<a href="'.route('invoice.create', $item->random_id).'" class="btn btn-success btn-sm me-2"><i class="fa fa-plus" aria-hidden="true"></i> Create</a>') !!}</a></td>
+                                <td class="text-center">{{ $item->quotation->ref_number }}</td>
+                                <td class="text-center">{{ $item->purchaseOrder->ref_number }}</td>
+                                <td class="text-center">{{ $item->deliveryOrder->delivery_number }}</td>
+                                <td class="text-center">{{ formatDate($item['created_at']) }}</td>
+                                {{-- @if(Auth::user()->getRoleNames()[0] == 'Supplier') --}}
                                     <td class="text-center">
-                                        @if($item['delivered'] == 'done' && $item['invoice'] == 'none')
-                                        <form role="form" method="post" action="{{ route('invoice.store') }}">
-                                            @csrf
-                                            <input type="hidden" value="{{ $item['random_id'] }}" name="random_id">
-                                            <button class="btn btn-success shadow-sm rounded-sm" type="submit">Create Invoice</button>
-                                        </form>
-                                        @endif
+                                        <a href="{{ './show/'.$item->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-link" aria-hidden="true"></i> Open</a>
                                     </td>
-                                @endif
+                                {{-- @endif --}}
                                 {{-- <td class="text-center">
                                     @if(is_null($item->credit_terms_id) || is_null($item->due_date))
                                         <a href="{{ './create/'.$item->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> EDIT</a>

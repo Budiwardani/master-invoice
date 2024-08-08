@@ -28,6 +28,7 @@ use App\Http\Controllers\ChangePassword;
 use App\Http\Controllers\ChoiceTestController;
 use App\Http\Controllers\CompanyController;
 use App\Http\Controllers\DeliveryOrderController;
+use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ItemController;
 use App\Http\Controllers\JudgesHasUserController;
 use App\Http\Controllers\PermissionController;
@@ -100,6 +101,17 @@ Route::group(['middleware' => 'auth'], function () {
         Route::post('/update/{slug}', [DeliveryOrderController::class, 'update'])->name('do.update');
         Route::post('/store', [DeliveryOrderController::class, 'store'])->name('do.store');
         Route::post('/save/{slug}', [DeliveryOrderController::class, 'save'])->name('do.save');
+    });
+
+    Route::prefix('invoice')->group(function () {
+        Route::get('/index', [InvoiceController::class, 'index'])->name('invoice.index');
+        Route::get('/edit/{slug}', [InvoiceController::class, 'edit'])->name('invoice.edit');
+        Route::get('/show/{slug}', [InvoiceController::class, 'show'])->name('invoice.show');
+        Route::get('/create/{slug}', [InvoiceController::class, 'create'])->name('invoice.create');
+        Route::post('/update/{slug}', [InvoiceController::class, 'update'])->name('invoice.update');
+        Route::post('/store', [InvoiceController::class, 'store'])->name('invoice.store');
+        Route::post('/save/{slug}', [InvoiceController::class, 'save'])->name('invoice.save');
+        Route::get('/print/{slug}', [InvoiceController::class, 'print'])->name('invoice.print');
     });
 
     Route::prefix('master-company')->group(function () {
