@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::table('invoice_details', function (Blueprint $table) {
             $table->integer('price');
-            $table->integer('total');
+            // $table->integer('total');
         });
     }
 
