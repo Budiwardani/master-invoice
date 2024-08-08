@@ -18,6 +18,7 @@
                         <tr>
                             <th scope="col" class="text-center"> Name </th>
                             <th scope="col" class="text-center"> Company </th>
+                            <th scope="col" class="text-center"> Email </th>
                             <th scope="col" class="text-center"> Role </th>
                             <th scope="col" style="width:10%" class="text-center">Action</th>
                         </tr>
@@ -27,6 +28,7 @@
                         <tr>
                             <td>{{ $u->name }}</td>
                             <td>{{ $u->company->company_name }}</td>
+                            <td>{{ $u->email }}</td>
                             <td class="text-center">
                                 @if(count($u->roles))
                                     <span class="badge bg-primary shadow border-0 ms-2 mb-2">
