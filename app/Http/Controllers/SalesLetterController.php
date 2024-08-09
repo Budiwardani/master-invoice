@@ -103,7 +103,7 @@ class SalesLetterController extends Controller
                     SalesLetterDetail::create([
                         'sales_leter_id'=> $input->id,
                         'item_id'       => $inputs['item_code'],
-                        'quantity'      => $inputs['quantity'],
+                        'quantity'      => str_replace(",","",$inputs['quantity']),
                         'price'         => str_replace(",","",$inputs['price'])
                     ]);
                 // }
