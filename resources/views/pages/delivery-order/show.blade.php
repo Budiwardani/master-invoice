@@ -106,7 +106,7 @@
                                 <td class="text-end">
                                     @foreach ($data->purchaseOrder->detail as $order)
                                         @if($order->item_id == $item->item_id)
-                                            {{ $order->quantity }}
+                                            {{ formatNumber($order->quantity) }}
                                         @endif
                                     @endforeach</td>
                             </tr>

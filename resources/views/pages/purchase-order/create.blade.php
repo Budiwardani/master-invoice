@@ -15,7 +15,7 @@
                             <div class="row">
                                 <div class="col-6">
                                     Terms
-                                    <select class="form-control" name="term_id">
+                                    <select class="form-control" name="term_id" required>
                                         <option value="">Select One</option>
                                         @foreach ($terms as $term)
                                             <option value="{{ $term->random_id }}">{{ $term->name }}</option>
@@ -65,13 +65,14 @@
                             </tr>
                         </thead>
                         <tbody>
+                            {{-- {{ dd($data->quotation) }} --}}
                             @foreach ($data->detail as $index=>$item)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $item->item_data->item_code }}</td>
                                 <td>{{ $item->item_data->item_name }}</td>
-                                <td><input class="form-control" value="" name="data[{{ $index }}][quantity]" type="number" placeholder="Quantity" inputmode="numeric"></td>
-                                <td class="text-end">{{ $item->price }}</td>
+                                <td><input class="form-control" value="" name="data[{{ $index }}][quantity]" type="number" placeholder="Quantity max {{ max_value($item->item_data->id,$data->quotation) }}" inputmode="numeric"></td>
+                                <td class="text-end">{{ formatNumber($item->price) }}</td>
                             </tr>
                             <input class="form-control" value="{{ $item->id }}" name="data[{{ $index }}][detail_id]" type="hidden" >
                             @endforeach
@@ -87,40 +88,17 @@
             </div>
         </div>
     </div>
-    <div class="modal fade" id="modal_add" tabindex="-1" aria-labelledby="UserDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="UserDetailsModalLabel">Tambah Permission</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="p-2">
-                    <form role="form" method="post" action="{{ route('item.store') }}">
-                        @csrf
-                        <div>
-                            <div class="mb-3">
-                                <label class="fw-bold">Item Code</label>
-                                <input class="form-control" value="" name="item_code" type="text" inputmode="numeric" placeholder="item_code">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="mb-3">
-                                <label class="fw-bold">Item Name</label>
-                                <input class="form-control" value="" name="item_name" type="text" placeholder="item_name">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
-                                <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
+    @php
+    function max_value($id,$delivery) {
+        foreach ($delivery->detail as $detail) {
+            if($detail->item_id == $id){
+                $order_sum = 0;
+                $order_sum = $order_sum + $detail->quantity;
+            }
+        }
+        return $order_sum;
+    }
+    @endphp
     <div id="alert">
         @include('components.alert')
     </div>

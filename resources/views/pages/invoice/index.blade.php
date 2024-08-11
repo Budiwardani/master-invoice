@@ -4,7 +4,7 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Invoice'])
     <div class="card shadow-lg mx-4 mt-8" id="user_info">
         <div class="card-body p-3">
-            <div class="row gx-4">
+            <div class="row gx-4" style="overflow-x:auto;">
                 <table class="table table-striped table-bordered table-hover" id="example">
                     <thead>
                         <tr>
@@ -15,38 +15,26 @@
                             <th scope="col" class="text-center"> Invoice Number </th>
                             <th scope="col" class="text-center"> Quotation Number </th>
                             <th scope="col" class="text-center"> Purchase Order Number </th>
-                            <th scope="col" class="text-center"> Delivery Number </th>
+                            {{-- <th scope="col" class="text-center"> Delivery Number </th> --}}
                             <th scope="col" class="text-center"> Create Date </th>
-                            {{-- @if(Auth::user()->getRoleNames()[0] == 'Supplier') --}}
-                                <th scope="col" class="text-center"> Action </th>
-                            {{-- @endif --}}
+                            <th scope="col" class="text-center"> Action </th>
                         </tr>
                     </thead>
                     <tbody>
                         @foreach ($data as $index=>$item)
-                        {{-- {{ dd($item) }} --}}
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 @if(Auth::user()->getRoleNames()[0] != 'Supplier')
-                                    <td> {{ $item->quotation->company->company_name }} </td>
+                                    <td> {{ ( $item->quotation ? $item->quotation->company->company_name : '') }} </td>
                                 @endif
                                 <td class="text-center">{!! ($item['invoice_number'] ? $item['invoice_number'] : '<a href="'.route('invoice.create', $item->random_id).'" class="btn btn-success btn-sm me-2"><i class="fa fa-plus" aria-hidden="true"></i> Create</a>') !!}</a></td>
-                                <td class="text-center">{{ $item->quotation->ref_number }}</td>
+                                <td class="text-center">{{ ($item->quotation ? $item->quotation->ref_number : '') }}</td>
                                 <td class="text-center">{{ $item->purchaseOrder->ref_number }}</td>
-                                <td class="text-center">{{ $item->deliveryOrder->delivery_number }}</td>
+                                {{-- <td class="text-center">{{ $item->deliveryOrder->delivery_number }}</td> --}}
                                 <td class="text-center">{{ formatDate($item['created_at']) }}</td>
-                                {{-- @if(Auth::user()->getRoleNames()[0] == 'Supplier') --}}
-                                    <td class="text-center">
-                                        <a href="{{ './show/'.$item->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-link" aria-hidden="true"></i> Open</a>
-                                    </td>
-                                {{-- @endif --}}
-                                {{-- <td class="text-center">
-                                    @if(is_null($item->credit_terms_id) || is_null($item->due_date))
-                                        <a href="{{ './create/'.$item->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> EDIT</a>
-                                    @else
-                                        {{ $item->due_date }}
-                                    @endif
-                                </td> --}}
+                                <td class="text-center">
+                                    <a href="{{ './show/'.$item->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-link" aria-hidden="true"></i> Open</a>
+                                </td>
                             </tr>
                         @endforeach
                     </tbody>

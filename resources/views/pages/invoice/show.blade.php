@@ -15,13 +15,59 @@
                         <a href="{{ '/invoice/print/'.$data->random_id }}" onclick="window.open(this.href, 'new', 'popup'); return false;" class="btn btn-primary"><i class="fa fa-print" aria-hidden="true"></i> Print</a>
                     </div>
                 </div>
-                <div class="row mb-2">
+                {{-- <div class="row mb-2">
                     <div class="col-4">
                         <div class="card p-2">
-                            <h4>Quotation Data</h4>
+                            Invoice Number : {{ $data->invoice_number }}
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card p-2">
+                            Invoice Date : {{ formatDate($data->date) }}
+                        </div>
+                    </div>
+                    <div class="col-4">
+                        <div class="card p-2">
+                            Due Date : {{ formatDate($data->due_date) }}
+                        </div>
+                    </div>
+                </div> --}}
+                <div class="row mb-2">
+                    <div class="col-6">
+                        <div class="card p-2">
+                            <h4><strong>Invoice Data</strong></h4>
                             <div class="row">
                                 <div class="col-4">
-                                    Ref Number
+                                    <h5>Invoice Number</h5>
+                                </div>
+                                <div class="col-8">
+                                    <h5>: {{ $data->invoice_number }}</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5>Invoice Date</h5>
+                                </div>
+                                <div class="col-8">
+                                    <h5>: {{ formatDate($data->date) }}</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5>Due Date</h5>
+                                </div>
+                                <div class="col-8">
+                                    <h5>: {{ formatDate($data->due_date) }}</h5>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-6">
+                        <div class="card p-2">
+                            <h4><strong>Additional Data</strong></h4>
+                            <div class="row">
+                                <div class="col-4">
+                                    Quotation Number
                                 </div>
                                 <div class="col-8">
                                     : <a href="{{ '/quotation/index' }}">{{ $data->quotation->ref_number }}</a>
@@ -29,34 +75,13 @@
                             </div>
                             <div class="row">
                                 <div class="col-4">
-                                    Create Date
-                                </div>
-                                <div class="col-8">
-                                    : {{ formatDate($data->quotation->created_at) }}
-                                </div>
-                            </div>
-                            <div class="row">
-                                <div class="col-4">
-                                    Supplier
-                                </div>
-                                <div class="col-8">
-                                    : {{ $data->quotation->company->company_name }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card p-2">
-                            <h4>Purchase Order Data</h4>
-                            <div class="row">
-                                <div class="col-4">
-                                    Ref Number
+                                    PO Number
                                 </div>
                                 <div class="col-8">
                                     : <a href="{{ '/purchase-order/show/'.$data->purchaseOrder->random_id }}">{{ $data->purchaseOrder->ref_number }}</a>
                                 </div>
                             </div>
-                            <div class="row">
+                            {{-- <div class="row">
                                 <div class="col-4">
                                     Create Date
                                 </div>
@@ -71,10 +96,10 @@
                                 <div class="col-8">
                                     : {{ formatDate($data->purchaseOrder->due_date) }}
                                 </div>
-                            </div>
+                            </div> --}}
                         </div>
                     </div>
-                    <div class="col-4">
+                    {{-- <div class="col-4">
                         <div class="card p-2">
                             <h4>Delivery Order Data</h4>
                             <div class="row">
@@ -102,98 +127,104 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
-                <div class="row mb-2">
-                    <div class="col-6">
-                        <div class="card p-2">
-                            <div class="row">
-                                <div class="col-4">
-                                    Invoice Number
-                                </div>
-                                <div class="col-8">
-                                    : {{ $data->invoice_number }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
-                    <div class="col-6">
-                        <div class="card p-2">
-                            <div class="row">
-                                <div class="col-4">
-                                    Due Date
-                                </div>
-                                <div class="col-8">
-                                    : {{ formatDate($data->due_date) }}
-                                </div>
-                            </div>
-                        </div>
-                    </div>
+                <div class="p-3" style="overflow-x:auto;">
+                    <table class="table table-striped table-bordered table-hover p-2">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;" class="text-center"> No. </th>
+                                <th scope="col" class="text-center"> Item Code </th>
+                                <th scope="col" class="text-center"> Item Name </th>
+                                <th scope="col" class="text-center"> Quantity </th>
+                                <th scope="col" class="text-center"> Price </th>
+                                <th scope="col" class="text-center"> Total </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data->detail as $index=>$item)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $item->item_data->item_code }}</td>
+                                <td>{{ $item->item_data->item_name }}</td>
+                                <td class="text-end">
+                                    @foreach ($data->purchaseOrder->detail as $order)
+                                        @if($order->item_id == $item->item_id)
+                                            {{ formatNumber($order->quantity) }}
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td class="text-end">
+                                    @foreach ($data->purchaseOrder->detail as $order)
+                                        @if($order->item_id == $item->item_id)
+                                            {{ formatNumber($order->price) }}
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td class="text-end">
+                                    @foreach ($data->purchaseOrder->detail as $order)
+                                        @if($order->item_id == $item->item_id)
+                                            {{ formatNumber($order->price * $order->quantity) }}
+                                        @endif
+                                    @endforeach
+                                </td>
+                            </tr>
+                            <input class="form-control" value="{{ $item->id }}" name="data[{{ $index }}][detail_id]" type="hidden" >
+                            @endforeach
+                            <tr>
+                                <td colspan="5" class="text-end"><strong>Total</strong></td>
+                                <td class="text-end">{{ formatNumber($data->total) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-end"><strong>VAT 11%</strong></td>
+                                <td class="text-end">{{ formatNumber(0.11 * $data->total) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-end"><strong>Grand Total</strong></td>
+                                <td class="text-end">{{ formatNumber($data->total + (0.11 * $data->total)) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                    <hr>
+                    <h4>Delivery Data</h4>
+                    {{-- {{ $data->purchaseOrder->deliveries }} --}}
+                    <table class="table table-bordered p-2">
+                        <thead>
+                            <tr style="background-color:#35fcdb">
+                                <th scope="col" class="text-center"> Item Code </th>
+                                <th scope="col" class="text-center"> Item Name </th>
+                                <th scope="col" class="text-center"> ETD </th>
+                                <th scope="col" class="text-center"> ETA </th>
+                                <th scope="col" class="text-center"> Quantity </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data->purchaseOrder->deliveries as $index=>$item)
+                            <tr style="background-color:#35fcdb">
+                            {{-- <tr style="background-color:#35fcdb;"> --}}
+                                <td colspan="5">
+                                    Delivery Nuber : {{ $item->delivery_number }}
+                                </td>
+                            </tr>
+                                @foreach ($item->detail as $detail)
+                                    <tr>
+                                        <td>{{ $detail->item_data->item_code }}</td>
+                                        <td>{{ $detail->item_data->item_name }}</td>
+                                        <td class="text-center">
+                                            {{ formatDate($item->etd) }}
+                                        </td>
+                                        <td class="text-center">
+                                            {{ formatDate($item->eta) }}
+                                        </td>
+                                        <td class="text-end">
+                                            {{ formatNumber($detail->quantity) }}
+                                        </td>
+                                    </tr>
+                                @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
                 </div>
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th style="width:100px;" class="text-center"> No. </th>
-                            <th scope="col" class="text-center"> Item Code </th>
-                            <th scope="col" class="text-center"> Item Name </th>
-                            <th scope="col" class="text-center"> Quantity </th>
-                            <th scope="col" class="text-center"> Price </th>
-                            <th scope="col" class="text-center"> Total </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($data->detail as $index=>$item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $item->item_data->item_code }}</td>
-                            <td>{{ $item->item_data->item_name }}</td>
-                            <td class="text-end">
-                                @foreach ($data->purchaseOrder->detail as $order)
-                                    @if($order->item_id == $item->item_id)
-                                        {{ formatNumber($order->quantity) }}
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td class="text-end">
-                                @foreach ($data->purchaseOrder->detail as $order)
-                                    @if($order->item_id == $item->item_id)
-                                        {{ formatNumber($order->price) }}
-                                    @endif
-                                @endforeach
-                            </td>
-                            <td class="text-end">
-                                @foreach ($data->purchaseOrder->detail as $order)
-                                    @if($order->item_id == $item->item_id)
-                                        {{ formatNumber($order->price * $order->quantity) }}
-                                    @endif
-                                @endforeach
-                            </td>
-                        </tr>
-                        <input class="form-control" value="{{ $item->id }}" name="data[{{ $index }}][detail_id]" type="hidden" >
-                        @endforeach
-                        <tr>
-                            <td colspan="5" class="text-end"><strong>Total</strong></td>
-                            <td class="text-end">{{ formatNumber($data->total) }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="text-end"><strong>TAX</strong></td>
-                            <td class="text-end">{{ formatNumber(0.11 * $data->total) }}</td>
-                        </tr>
-                        <tr>
-                            <td colspan="5" class="text-end"><strong>Grand Total</strong></td>
-                            <td class="text-end">{{ formatNumber($data->total + (0.11 * $data->total)) }}</td>
-                        </tr>
-                    </tbody>
-                </table>
-                    {{-- @if (Auth::user()->hasAnyPermission(['do.update']))
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
-                            <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
-                        </div>
-                    </div>
-                    @endif
-                </form> --}}
             </div>
         </div>
     </div>

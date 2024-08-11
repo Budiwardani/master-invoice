@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4">
+                        {{-- <div class="col-4">
                             <div class="card p-2">
                                 <h4>Delivery Order Data</h4>
                                 <div class="row">
@@ -94,7 +94,7 @@
                                     </div>
                                 </div>
                             </div>
-                        </div>
+                        </div> --}}
                     </div>
                     <div class="row mb-2">
                         <div class="col-6">

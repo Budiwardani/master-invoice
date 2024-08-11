@@ -53,6 +53,7 @@
                                 <th style="width:100px;" class="text-center"> No. </th>
                                 <th scope="col" class="text-center"> Item Code </th>
                                 <th scope="col" class="text-center"> Item Name </th>
+                                <th scope="col" class="text-center"> Delivered </th>
                                 <th scope="col" class="text-center"> Quantity </th>
                                 <th scope="col" style="width:10%" class="text-center">Price</th>
                                 @if(Auth::user()->hasAnyPermission(['do.create']) && $data->current_status == 'open')
@@ -66,6 +67,7 @@
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $item->item_data->item_code }}</td>
                                 <td>{{ $item->item_data->item_name }}</td>
+                                <td class="text-end">{{ formatNumber(delivered($item->item_data->id,$data)) }}</td>
                                 <td class="text-end">{{ formatNumber($item->quantity) }}</td>
                                 <td class="text-end">{{ formatNumber($item->price) }}</td>
                                 @if(Auth::user()->hasAnyPermission(['do.create']) && $data->current_status == 'open')
@@ -190,6 +192,32 @@
             }
         }
     </style>
+    @php
+    function delivered($id,$deliveries) {
+        // dd($deliveries);
+        $sum = 0;
+        foreach ($deliveries['deliveries'] as $element) {
+            foreach ($element->detail as $detail) {
+                if ($detail->item_id == $id) {
+                    $sum += $detail->quantity; // Adjust this if you need to sum a different property
+                }
+            }
+        }
+        return $sum;
+    }
+    @endphp
+    {{-- <script>
+        const datas =;
+        function delivered(id){
+            var sum = 0;
+            datas.forEach(element => {
+                if (element.id === id) {
+                    sum += element.quantity; // or any other property that needs to be summed
+                }
+            });
 
+            return sum;
+        }
+    </script> --}}
 
 @endsection

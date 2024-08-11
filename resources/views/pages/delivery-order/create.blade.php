@@ -14,24 +14,33 @@
                                         ETD
                                 </div>
                                 <div class="col-8">
-                                    <input class="form-control" value="" name="etd" type="date" min="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="ETD">
+                                    <input class="form-control" value="" name="etd" type="date" min="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="ETD" required>
                                 </div>
+                                @error('etd')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="row mb-2">
                                 <div class="col-2">
                                         ETA
                                 </div>
                                 <div class="col-8">
-                                    <input class="form-control" value="" name="eta" type="date" min="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="ETA">
+                                    <input class="form-control" value="" name="eta" type="date" min="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="ETA" required>
                                 </div>
+                                @error('eta')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                             <div class="row mb-2">
                                 <div class="col-2">
                                     DO Number
                                 </div>
                                 <div class="col-8">
-                                    <input class="form-control" value="" name="do_number" type="text" placeholder="Do Number">
+                                    <input class="form-control" value="" name="do_number" type="text" placeholder="Do Number" required>
                                 </div>
+                                @error('do_number')
+                                    <div class="text-danger">{{ $message }}</div>
+                                @enderror
                             </div>
                         </div>
                         <div class="col-6">
@@ -64,6 +73,7 @@
                             </div>
                         </div>
                     </div>
+                    {{-- {{ dd($delivery) }} --}}
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
@@ -75,12 +85,33 @@
                             </tr>
                         </thead>
                         <tbody>
+                            @php
+                            function max_value($id,$delivery) {
+                                foreach ($delivery->detail as $detail) {
+                                    if($detail->item_id == $id){
+                                        $deliver = 0;
+                                        $order_sum = 0;
+                                        $remain = 0;
+                                        foreach($delivery->deliveries as $delivered){
+                                            foreach($delivered->detail as $data_detail) {
+                                                if($data_detail->item_id == $id){
+                                                    $deliver = $deliver + $data_detail->quantity;
+                                                }
+                                            }
+                                        }
+                                        $order_sum = $order_sum + $detail->quantity;
+                                        $remain = $order_sum - $deliver;
+                                        return $remain;
+                                    }
+                                }
+                            }
+                            @endphp
                             @foreach ($data->detail as $index=>$item)
                             <tr>
                                 <td>{{ $index + 1 }}</td>
                                 <td>{{ $item->item_data->item_code }}</td>
                                 <td>{{ $item->item_data->item_name }}</td>
-                                <td><input class="form-control" value="" name="data[{{ $index }}][quantity]" type="number" placeholder="Quantity" inputmode="numeric"></td>
+                                <td><input class="form-control" value="" name="data[{{ $index }}][quantity]" type="number" max="{{ max_value($item->item_data->id,$delivery) }}" placeholder="Quantity max {{ max_value($item->item_data->id,$delivery) }}" inputmode="numeric" required></td>
                                 <td class="text-end">
                                     @foreach ($data->purchaseOrder->detail as $order)
                                         @if($order->item_id == $item->item_id)
@@ -99,40 +130,6 @@
                         </div>
                     </div>
                 </form>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modal_add" tabindex="-1" aria-labelledby="UserDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="UserDetailsModalLabel">Tambah Permission</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="p-2">
-                    <form role="form" method="post" action="{{ route('item.store') }}">
-                        @csrf
-                        <div>
-                            <div class="mb-3">
-                                <label class="fw-bold">Item Code</label>
-                                <input class="form-control" value="" name="item_code" type="text" inputmode="numeric" placeholder="item_code">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="mb-3">
-                                <label class="fw-bold">Item Name</label>
-                                <input class="form-control" value="" name="item_name" type="text" placeholder="item_name">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
-                                <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>

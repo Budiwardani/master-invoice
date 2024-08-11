@@ -34,7 +34,9 @@ class DeliveryOrderController extends Controller
         } else {
             $data = DeliveryOrder::with('detail.item_data','purchaseOrder.detail','purchaseOrder.quotation.company','invoice')->get();
         }
+        // dd($data);
         foreach($data as $row_data) {
+            // dd($row_data);
             $delivered = '';
             $invoice = 'none';
             foreach($row_data->purchaseOrder->detail as $po_detail){
@@ -54,19 +56,18 @@ class DeliveryOrderController extends Controller
                 $invoice = 'exist';
             }
             array_push($return_arr,[
-                'company_name'      => $row_data->purchaseOrder->quotation->company->company_name,
+                'company_name'      => ($row_data->purchaseOrder->quotation ? $row_data->purchaseOrder->quotation->company->company_name : ''),
                 'delivery_number'   => $row_data->delivery_number,
                 'date'              => $row_data->date,
                 'etd'               => $row_data->etd,
                 'eta'               => $row_data->eta,
                 'current_status'    => $row_data->current_status,
                 'random_id'         => $row_data->random_id,
+                'ref_numnber'       => $row_data->purchaseOrder->random_id,
                 'delivered'         => $delivered,
                 'invoice'           => $invoice,
             ]);
         }
-
-        // dd($return_arr);
 
         return view('pages.delivery-order.index',[
             'data'      => $return_arr,
@@ -79,9 +80,10 @@ class DeliveryOrderController extends Controller
     public function create($id)
     {
         $data = DeliveryOrder::where('random_id',$id)->with('detail.item_data','purchaseOrder.quotation.company')->first();
-        // dd($data);
+        $deliveries = PurchaseOrder::where('id',$data->purchase_order_id)->with('detail','deliveries.detail')->first(); //DeliveryOrder::with('purchaseOrder.detail')->where('purchase_order_id',$data->purchase_order_id)->get();
         return view('pages.delivery-order.create',[
             'data'      => $data,
+            'delivery'  => $deliveries
         ]);
     }
 
@@ -90,10 +92,10 @@ class DeliveryOrderController extends Controller
      */
     public function store(Request $request)
     {
-        $quotation = PurchaseOrder::where('random_id',$request->ref_number)->first();
-        $rendom_id  = md5(Carbon::now());
+        $purchaseOrder = PurchaseOrder::where('random_id',$request->ref_number)->first();
+        $rendom_id  = md5($purchaseOrder->id.Carbon::now());
         $insert = DeliveryOrder::create([
-            'purchase_order_id' => $quotation->id,
+            'purchase_order_id' => $purchaseOrder->id,
             'revision'          => '0',
             'current_status'    => 'on delivery',
             'random_id'         => $rendom_id
@@ -106,9 +108,36 @@ class DeliveryOrderController extends Controller
             ]);
         }
 
-        $quotation->update([
-            'current_status'    => 'approved'
+        // $purchaseOrder->update([
+        //     'current_status'    => 'approved'
+        // ]);
+
+        if($insert){
+            return redirect()->route('do.create',$rendom_id);
+        }
+    }
+
+    public function store_other(Request $request)
+    {
+        $purchaseOrder = PurchaseOrder::where('random_id',$request->ref_number)->first();
+        $rendom_id  = md5($purchaseOrder->id.Carbon::now());
+        $insert = DeliveryOrder::create([
+            'purchase_order_id' => $purchaseOrder->id,
+            'revision'          => '0',
+            'current_status'    => 'on delivery',
+            'random_id'         => $rendom_id
         ]);
+
+        foreach($request->items as $item){
+            DeliveryOrderDetail::create([
+                'delivery_order_id' => $insert->id,
+                'item_id'           => $item
+            ]);
+        }
+
+        // $purchaseOrder->update([
+        //     'current_status'    => 'approved'
+        // ]);
 
         if($insert){
             return redirect()->route('do.create',$rendom_id);
@@ -117,7 +146,15 @@ class DeliveryOrderController extends Controller
 
     public function save(Request $request,$id)
     {
-        $po_data = DeliveryOrder::where('random_id',$id)->first();
+        $validatedData = $request->validate([
+            'etd'       => 'required',
+            'eta'       => 'required',
+            'do_number' => 'required',
+            'data'      => 'required',
+        ]);
+
+        $do_data = DeliveryOrder::where('random_id',$id)->first();
+
         foreach($request->data as $data){
             $current_data = DeliveryOrderDetail::where('id',$data['detail_id'])->first();
             $current_data->update([
@@ -125,11 +162,28 @@ class DeliveryOrderController extends Controller
             ]);
         }
 
-        $update = $po_data->update([
+        $update = $do_data->update([
             'etd'   => $request->etd,
             'eta'   => $request->eta,
             'delivery_number'   => $request->do_number
         ]);
+
+        $po_data = PurchaseOrder::where('id',$do_data->purchase_order_id)->with('detail')->first();
+
+        $deliveries = DeliveryOrder::where('purchase_order_id',$do_data->purchase_order_id)->with('detail')->get()->sum(function ($delivery) {
+            return $delivery->detail->sum('quantity');
+        });
+
+        $sum = 0;
+        foreach($po_data->detail as $po_detail) {
+            $sum = $sum + $po_detail->quantity;
+        }
+
+        if($sum == $deliveries) {
+            $po_data->update([
+                'current_status'    => 'approved'
+            ]);
+        }
 
         return redirect()->route('do.index')->with('success','created');
     }

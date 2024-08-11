@@ -26,17 +26,61 @@ class PurchaseOrderController extends Controller
 
         if(in_array('Supplier',$roles_array)){
             $company_id = $role_name->company_id;
-            $data = PurchaseOrder::where('current_status','open')->with('detail.item_data','quotation.company')
+            $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail','invoice')
             ->whereHas('quotation',function ($query) use ($company_id) {
                 return $query->where('company_id',$company_id);
             })
             ->get();
         } else {
-            $data = PurchaseOrder::where('current_status','open')->with('detail.item_data','quotation.company')->get();
+            $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail','invoice')->get();
         }
+        $return_arr = array();
+        foreach($data as $current) {
+            $delivered = '';
+            $invoice = 'none';
+            $sum = 0;
+            $orders_cont = 0;
+            foreach($current->detail as $det){
+                $orders_cont = $orders_cont + $det->quantity;
+            }
+            foreach($current->deliveries as $row_data){
+                foreach($row_data->purchaseOrder->detail as $po_detail){
+                    foreach($row_data->detail as $data_detail){
+                        if($data_detail->item_id == $po_detail->item_id) {
+                            if($row_data->purchase_order_id == $current->id){
+                                $sum = $sum + $data_detail->quantity;
+                            }
+                        }
+                    }
+                }
+                if($orders_cont == $sum) {
+                    $delivered = 'done';
+                } else {
+                    $delivered = 'part';
+                }
+                if(!$current->invoice == null){
+                    $invoice = 'exist';
+                }
+            }
+
+            array_push($return_arr,[
+                'po_number'         => $current->ref_number,
+                'create_date'       => $current->created_at,
+                'status'            => $current->current_status,
+                'due_date'          => $current->due_date,
+                'random_id'         => $current->random_id,
+                'delivered'         => $delivered,
+                'invoice'           => $invoice,
+                'credit_terms_id'   => $current->credit_terms_id,
+                'date'              => $current->date,
+                'invoice_id'        => ($current->invoice ? $current->invoice->random_id : null),
+            ]);
+        }
+        // dd($data,$return_arr);
 
         return view('pages.purchase-order.index',[
             'data'      => $data,
+            'return_arr'=> $return_arr,
         ]);
     }
 
@@ -45,7 +89,7 @@ class PurchaseOrderController extends Controller
      */
     public function create($id)
     {
-        $data = PurchaseOrder::where('random_id',$id)->with('detail.item_data','quotation.company')->first();
+        $data = PurchaseOrder::where('random_id',$id)->with('detail.item_data','quotation.detail','quotation.company','deliveries.detail')->first();
         $terms = Term::get();
         return view('pages.purchase-order.create',[
             'data'      => $data,
@@ -125,7 +169,7 @@ class PurchaseOrderController extends Controller
      */
     public function show($random_id)
     {
-        $data = PurchaseOrder::where('random_id',$random_id)->with('detail.item_data','quotation.company')->first();
+        $data = PurchaseOrder::where('random_id',$random_id)->with('detail.item_data','quotation.company','deliveries.detail.item_data')->first();
         return view('pages.purchase-order.show',[
             'data'      => $data,
         ]);

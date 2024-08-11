@@ -14,55 +14,73 @@
                 @endif
                 @if(count($data))
                     @if(Auth::user()->getRoleNames()[0] == 'Supplier')
-                    <table class="table table-striped table-bordered table-hover" id="example">
-                        <thead>
-                            <tr>
-                                <th style="width:100px;" class="text-center"> No. </th>
-                                <th scope="col" class="text-center"> Item Code </th>
-                                <th scope="col" class="text-center"> Item Name </th>
-                                <th scope="col" class="text-center"> Quantity </th>
-                                <th scope="col" class="text-center"> Price </th>
-                                <th scope="col" class="text-center"> Status </th>
-                                <th scope="col" style="width:10%" class="text-center">Action</th>
-                            </tr>
-                        </thead>
-                        <tbody>
-                            @foreach ($data as $index=>$item)
-                                @foreach ($item->detail as $detail)
-                                <tr>
-                                    <td>{{ $index + 1 }}</td>
-                                    <td>{{ $detail->item_data->item_code }}</td>
-                                    <td>{{ $detail->item_data->item_name }}</td>
-                                    <td class="text-end">{{ formatNumber($detail->quantity) }}</td>
-                                    <td class="text-end">{{ formatNumber($detail->price) }}</td>
-                                    <td class="text-center">
-                                        @php
-                                            switch($item->current_status ){
-                                                case 'approved' :
-                                                    echo '<span class="badge bg-success shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
-                                                break;
-                                                case 'decline' :
-                                                    echo '<span class="badge bg-danger shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
-                                                break;
-                                                case 'close' :
-                                                    echo '<span class="badge bg-warning shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
-                                                break;
-                                                default :
-                                                    echo '<span class="badge bg-primary shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
-                                                break;
-                                            }
-                                        @endphp
-                                    </td>
-                                    <td class="text-center">
-                                        @if($item->current_status == 'waiting')
-                                        <a href="{{ './delete/'.$item->random_id }}" class="btn btn-danger btn-sm me-2"><i class="fa fa-trash-alt me-1"></i> Delete</a>
-                                        @endif
-                                    </td>
-                                </tr>
-                                @endforeach
-                            @endforeach
-                        </tbody>
-                    </table>
+                        @foreach ($data as $index=>$item)
+                        @php
+                            $sum = 0;
+                        @endphp
+                            <div class="card p-2 mb-4"  style="overflow-x:auto;">
+                                <h4>{{ $item->ref_number }}</h4>
+                                <table class="table table-striped table-bordered table-hover">
+                                    <thead>
+                                        <tr>
+                                            <th scope="col" class="text-center"> Item Code </th>
+                                            <th scope="col" class="text-center"> Item Name </th>
+                                            <th scope="col" class="text-center"> Quantity </th>
+                                            <th scope="col" class="text-center"> Price </th>
+                                            <th scope="col" class="text-center"> Status </th>
+                                            <th scope="col" class="text-center"> Total </th>
+                                            <th scope="col" style="width:10%" class="text-center">Action</th>
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                        @foreach ($item->detail as $detail)
+                                            <tr>
+                                                <td>{{ $detail->item_data->item_code }}</td>
+                                                <td>{{ $detail->item_data->item_name }}</td>
+                                                <td class="text-end">{{ formatNumber($detail->quantity) }}</td>
+                                                <td class="text-end">{{ formatNumber($detail->price) }}</td>
+                                                <td class="text-end">{{ formatNumber($detail->quantity * $detail->price) }}</td>
+                                                <td class="text-center">
+                                                    @php
+                                                        switch($item->current_status ){
+                                                            case 'approved' :
+                                                                echo '<span class="badge bg-success shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
+                                                            break;
+                                                            case 'decline' :
+                                                                echo '<span class="badge bg-danger shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
+                                                            break;
+                                                            case 'close' :
+                                                                echo '<span class="badge bg-warning shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
+                                                            break;
+                                                            default :
+                                                                echo '<span class="badge bg-primary shadow border-0 ms-2 mb-2">'.$item->current_status.'</span>';
+                                                            break;
+                                                        }
+                                                    @endphp
+                                                </td>
+                                                <td class="text-center">
+                                                    @if($item->current_status == 'waiting')
+                                                    <a href="{{ './delete/'.$item->random_id }}" class="btn btn-danger btn-sm me-2"><i class="fa fa-trash-alt me-1"></i> Delete</a>
+                                                    @endif
+                                                </td>
+                                            </tr>
+                                            @php
+                                                $sum = $sum + ($detail->quantity * $detail->price);
+                                            @endphp
+                                        @endforeach
+                                        <tr>
+                                            {{-- <td>{{ $key + 1 }}</td> --}}
+                                            <td colspan="4" class="text-end">Total</td>
+                                            <td class="text-end">{{ formatNumber($sum) }}</td>
+                                            <td class="text-center">
+                                            </td>
+                                            <td class="text-center">
+                                            </td>
+                                        </tr>
+                                    </tbody>
+                                </table>
+                            </div>
+                        @endforeach
                     @else
                         @foreach ($data as $indx=>$d)
                         @if(count($d))
@@ -90,10 +108,14 @@
                                                             <th scope="col" class="text-center"> Item Name </th>
                                                             <th scope="col" class="text-center"> Quantity </th>
                                                             <th scope="col" class="text-center"> Price </th>
+                                                            <th scope="col" class="text-center"> Total </th>
                                                             <th scope="col" style="width:10%" class="text-center">Action</th>
                                                         </tr>
                                                     </thead>
                                                     <tbody>
+                                                        @php
+                                                            $sum = 0;
+                                                        @endphp
                                                         @foreach ($details->detail as $detail)
                                                         <tr>
                                                             {{-- <td>{{ $key + 1 }}</td> --}}
@@ -101,11 +123,22 @@
                                                             <td>{{ $detail->item_data->item_name }}</td>
                                                             <td class="text-end">{{ formatNumber($detail->quantity) }}</td>
                                                             <td class="text-end">{{ formatNumber($detail->price) }}</td>
+                                                            <td class="text-end">{{ formatNumber($detail->quantity * $detail->price) }}</td>
                                                             <td class="text-center">
                                                                 <input type="checkbox" name="items[]" value="{{$detail->item_data->id}}/{{ $detail->price }}">
                                                             </td>
                                                         </tr>
+                                                        @php
+                                                            $sum = $sum + ($detail->quantity * $detail->price);
+                                                        @endphp
                                                         @endforeach
+                                                        <tr>
+                                                            {{-- <td>{{ $key + 1 }}</td> --}}
+                                                            <td colspan="4" class="text-end">Total</td>
+                                                            <td class="text-end">{{ formatNumber($sum) }}</td>
+                                                            <td class="text-center">
+                                                            </td>
+                                                        </tr>
                                                     </tbody>
                                                 </table>
                                                 <div class="row mt-3">

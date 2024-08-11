@@ -100,6 +100,7 @@ Route::group(['middleware' => 'auth'], function () {
         Route::get('/create/{slug}', [DeliveryOrderController::class, 'create'])->name('do.create');
         Route::post('/update/{slug}', [DeliveryOrderController::class, 'update'])->name('do.update');
         Route::post('/store', [DeliveryOrderController::class, 'store'])->name('do.store');
+        Route::post('/store_other', [DeliveryOrderController::class, 'store_other'])->name('do.store_other');
         Route::post('/save/{slug}', [DeliveryOrderController::class, 'save'])->name('do.save');
     });
 

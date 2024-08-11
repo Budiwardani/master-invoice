@@ -47,7 +47,6 @@ class InvoiceController extends Controller
     public function create($id)
     {
         $data = Invoice::where('random_id',$id)->first();
-        // dd($data);
         return view('pages.invoice.create',[
             'data'      => $data,
         ]);
@@ -59,12 +58,12 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $sum = 0;
-        $data = DeliveryOrder::with('purchaseOrder.detail','purchaseOrder.quotation')->where('random_id',$request->random_id)->first();
+        $data = PurchaseOrder::with('detail','quotation')->where('random_id',$request->random_id)->first();
         // dd($data,$data->purchaseOrder->id);
         $rendom_id  = md5(Carbon::now());
         $insert = Invoice::create([
-            'purchase_order_id' => $data->purchaseOrder->id,
-            'sales_leter_id'    => $data->purchaseOrder->quotation->id,
+            'purchase_order_id' => $data->id,
+            'sales_leter_id'    => $data->quotation->id,
             'delivery_order_id' => $data->id,
             'date'              => Carbon::now(),
             'sub_total'         => 0,
@@ -76,7 +75,7 @@ class InvoiceController extends Controller
             'random_id'         => $rendom_id
         ]);
 
-        foreach($data->purchaseOrder->detail as $item){
+        foreach($data->detail as $item){
             $sum = $sum + ($item->quantity * $item->price);
             InvoiceDetail::create([
                 'invoice_id'    => $insert->id,
@@ -122,7 +121,7 @@ class InvoiceController extends Controller
      */
     public function show($random_id)
     {
-        $data = Invoice::where('random_id',$random_id)->with('detail.item_data','purchaseOrder','deliveryOrder','quotation.company')->first();
+        $data = Invoice::where('random_id',$random_id)->with('detail.item_data','purchaseOrder.deliveries.detail.item_data','quotation.company')->first();
 
         return view('pages.invoice.show',[
             'data'      => $data,
@@ -131,7 +130,7 @@ class InvoiceController extends Controller
 
     public function print($random_id)
     {
-        $data = Invoice::where('random_id',$random_id)->with('detail.item_data','purchaseOrder','deliveryOrder','quotation.company')->first();
+        $data = Invoice::where('random_id',$random_id)->with('detail.item_data','purchaseOrder.deliveries.detail','quotation.company')->first();
         // dd($data);
 
         return view('pages.invoice.print',[

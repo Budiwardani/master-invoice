@@ -9,8 +9,8 @@
                     @csrf
                     <div class="col-md-6"><button type="button" class="btn btn-success mt-2" onclick="addRow()"><i class="fa fa-plus me-2"></i>Add Row</button></div>
                     <div class="row">
-                        <div class="col-md-6"><label class="fw-bold">Due Date</label><input class="form-control" value="" name="due_date" type="date" placeholder="Ref Number" inputmode="numeric"></div>
-                        <div class="col-md-6"><label class="fw-bold">Ref No</label><input class="form-control" value="" name="ref_no" type="text" placeholder="Ref Number" inputmode="numeric"></div>
+                        <div class="col-md-6"><label class="fw-bold">Due Date</label><input class="form-control" value="" name="due_date" type="date" placeholder="Ref Number" inputmode="numeric" required></div>
+                        <div class="col-md-6"><label class="fw-bold">Ref No</label><input class="form-control" value="" name="ref_no" type="text" placeholder="Ref Number" inputmode="numeric" required></div>
                     </div>
                     <div id="input-container">
                         <div id="rows-container">
@@ -152,13 +152,13 @@
             <div class="col-md-3">
                 <div class="mb-3">
                     <label class="fw-bold">Quantity</label>
-                    <input class="form-control price" name="input[${rowCount}][quantity]" type="text" placeholder="Quantity" inputmode="numeric" onkeyup="format_num_array('price')">
+                    <input class="form-control price" name="input[${rowCount}][quantity]" type="text" placeholder="Quantity" inputmode="numeric" onkeyup="format_num_array('price')" required>
                 </div>
             </div>
             <div class="col-md-3">
                 <div class="mb-3">
                     <label class="fw-bold">Price</label>
-                    <input class="form-control price" name="input[${rowCount}][price]" type="text" placeholder="Price" inputmode="numeric" onkeyup="format_num_array('price')">
+                    <input class="form-control price" name="input[${rowCount}][price]" type="text" placeholder="Price" inputmode="numeric" onkeyup="format_num_array('price')" required>
                 </div>
             </div>
             <div class="col-md-2">

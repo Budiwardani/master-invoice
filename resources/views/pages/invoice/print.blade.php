@@ -70,133 +70,109 @@
             <h4><strong>{{ $data->quotation->company->company_name }}</strong></h4>
         </div>
         <hr>
-        <div class="text-center align-middle">
-            <strong>INVOICE</strong>
+        <div class="text-center align-middle mb-2">
+            <strong><u>INVOICE</u></strong>
         </div>
         <div>
             <div>
                 <div class="row mb-2">
-                    <div class="col-4">
-                        <div class="card p-2">
-                            <h4>Quotation Data</h4>
-                            <table>
-                                <tr>
-                                    <td>
-                                        Ref Number
-                                    </td>
-                                    <td>
-                                        {{ $data->quotation->ref_number }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Create Date
-                                    </td>
-                                    <td>
-                                        {{ formatDate($data->quotation->created_at) }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Supplier
-                                    </td>
-                                    <td>
-                                        {{ $data->quotation->company->company_name }}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card p-2">
-                            <h4>Purchase Order Data</h4>
-                            <table>
-                                <tr>
-                                    <td>
-                                        Ref Number
-                                    </td>
-                                    <td>
-                                        {{ $data->purchaseOrder->ref_number }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Create Date
-                                    </td>
-                                    <td>
-                                        {{ formatDate($data->purchaseOrder->created_at) }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Due Date
-                                    </td>
-                                    <td>
-                                        {{ formatDate($data->purchaseOrder->due_date) }}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                    <div class="col-4">
-                        <div class="card p-2">
-                            <h4>Delivery Order Data</h4>
-                            <table>
-                                <tr>
-                                    <td>
-                                        Ref Number
-                                    </td>
-                                    <td>
-                                        {{ $data->deliveryOrder->delivery_number }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Create Date
-                                    </td>
-                                    <td>
-                                        {{ formatDate($data->deliveryOrder->created_at) }}
-                                    </td>
-                                </tr>
-                                <tr>
-                                    <td>
-                                        Update
-                                    </td>
-                                    <td>
-                                        {{ formatDate($data->deliveryOrder->updated_at) }}
-                                    </td>
-                                </tr>
-                            </table>
-                        </div>
-                    </div>
-                </div>
-                <div class="row mb-2">
                     <div class="col-6">
                         <div class="card p-2">
+                            <h4><strong>Invoice Data</strong></h4>
                             <div class="row">
-                                <div class="col-6">
-                                    Invoice Number
+                                <div class="col-4">
+                                    <h5>Invoice Number</h5>
                                 </div>
-                                <div class="col-6">
-                                    : {{ $data->invoice_number }}
+                                <div class="col-8">
+                                    <h5>: {{ $data->invoice_number }}</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5>Invoice Date</h5>
+                                </div>
+                                <div class="col-8">
+                                    <h5>: {{ formatDate($data->date) }}</h5>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    <h5>Due Date</h5>
+                                </div>
+                                <div class="col-8">
+                                    <h5>: {{ formatDate($data->due_date) }}</h5>
                                 </div>
                             </div>
                         </div>
                     </div>
                     <div class="col-6">
                         <div class="card p-2">
+                            <h4><strong>Additional Data</strong></h4>
                             <div class="row">
-                                <div class="col-6">
+                                <div class="col-4">
+                                    Quotation Number
+                                </div>
+                                <div class="col-8">
+                                    : {{ $data->quotation->ref_number }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    PO Number
+                                </div>
+                                <div class="col-8">
+                                    : {{ $data->purchaseOrder->ref_number }}
+                                </div>
+                            </div>
+                            {{-- <div class="row">
+                                <div class="col-4">
+                                    Create Date
+                                </div>
+                                <div class="col-8">
+                                    : {{ formatDate($data->purchaseOrder->created_at) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
                                     Due Date
                                 </div>
-                                <div class="col-6">
-                                    : {{ formatDate($data->due_date) }}
+                                <div class="col-8">
+                                    : {{ formatDate($data->purchaseOrder->due_date) }}
+                                </div>
+                            </div> --}}
+                        </div>
+                    </div>
+                    {{-- <div class="col-4">
+                        <div class="card p-2">
+                            <h4>Delivery Order Data</h4>
+                            <div class="row">
+                                <div class="col-4">
+                                    Ref Number
+                                </div>
+                                <div class="col-8">
+                                    : <a href="{{ '/delivery-order/show/'.$data->deliveryOrder->random_id }}">{{ $data->deliveryOrder->delivery_number }}</a>
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    Create Date
+                                </div>
+                                <div class="col-8">
+                                    : {{ formatDate($data->deliveryOrder->created_at) }}
+                                </div>
+                            </div>
+                            <div class="row">
+                                <div class="col-4">
+                                    Update Date
+                                </div>
+                                <div class="col-8">
+                                    : {{ formatDate($data->deliveryOrder->updated_at) }}
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                 </div>
-                <table class="table table-striped table-bordered table-bordered-last">
+                <table class="table table-bordered table-bordered-last">
                     <thead>
                         <tr style="border-bottom: 3pt solid black;">
                             <th style="width:100px;" class="text-center"> No. </th>
@@ -242,7 +218,7 @@
                             <td class="text-end">{{ formatNumber($data->total) }}</td>
                         </tr>
                         <tr>
-                            <td colspan="5" class="text-end"><strong>TAX</strong></td>
+                            <td colspan="5" class="text-end"><strong>VAT 11%</strong></td>
                             <td class="text-end">{{ formatNumber(0.11 * $data->total) }}</td>
                         </tr>
                         <tr style="border-bottom: 3pt solid black;">

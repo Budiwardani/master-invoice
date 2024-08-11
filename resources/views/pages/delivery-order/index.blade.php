@@ -17,9 +17,9 @@
                             <th scope="col" class="text-center"> ETD </th>
                             <th scope="col" class="text-center"> ETA </th>
                             <th scope="col" class="text-center"> Status </th>
-                            @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                            {{-- @if(Auth::user()->getRoleNames()[0] == 'Supplier')
                                 <th scope="col" class="text-center"> Action </th>
-                            @endif
+                            @endif --}}
                         </tr>
                     </thead>
                     <tbody>
@@ -35,17 +35,17 @@
                                 <td class="text-center">{{ formatDate($item['eta']) }}</td>
                                 <td class="text-center">
                                     @php
-                                        switch($item['delivered'] ){
-                                            case 'done' :
+                                        switch($item['current_status'] ){
+                                            case 'arrived' :
                                                 echo '<span class="badge bg-success shadow border-0 ms-2 mb-2">Arived</span>';
                                             break;
                                             default :
-                                                echo '<span class="badge bg-warning shadow border-0 ms-2 mb-2">partially sent</span>';
+                                                echo '<span class="badge bg-warning shadow border-0 ms-2 mb-2">on delivery</span>';
                                             break;
                                         }
                                     @endphp
                                 </td>
-                                @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                {{-- @if(Auth::user()->getRoleNames()[0] == 'Supplier')
                                     <td class="text-center">
                                         @if($item['delivered'] == 'done' && $item['invoice'] == 'none')
                                         <form role="form" method="post" action="{{ route('invoice.store') }}">
@@ -55,7 +55,7 @@
                                         </form>
                                         @endif
                                     </td>
-                                @endif
+                                @endif --}}
                                 {{-- <td class="text-center">
                                     @if(is_null($item->credit_terms_id) || is_null($item->due_date))
                                         <a href="{{ './create/'.$item->random_id }}" class="btn btn-success btn-sm me-2"><i class="fa fa-pencil-alt me-1"></i> EDIT</a>
@@ -67,40 +67,6 @@
                         @endforeach
                     </tbody>
                 </table>
-            </div>
-        </div>
-    </div>
-    <div class="modal fade" id="modal_add" tabindex="-1" aria-labelledby="UserDetailsModalLabel" aria-hidden="true">
-        <div class="modal-dialog">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title" id="UserDetailsModalLabel">Tambah Permission</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="p-2">
-                    <form role="form" method="post" action="{{ route('item.store') }}">
-                        @csrf
-                        <div>
-                            <div class="mb-3">
-                                <label class="fw-bold">Item Code</label>
-                                <input class="form-control" value="" name="item_code" type="text" inputmode="numeric" placeholder="item_code">
-                            </div>
-                        </div>
-                        <div>
-                            <div class="mb-3">
-                                <label class="fw-bold">Item Name</label>
-                                <input class="form-control" value="" name="item_name" type="text" placeholder="item_name">
-                            </div>
-                        </div>
-                        <hr>
-                        <div class="row mt-3">
-                            <div class="col-12">
-                                <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
-                                <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
-                            </div>
-                        </div>
-                    </form>
-                </div>
             </div>
         </div>
     </div>
