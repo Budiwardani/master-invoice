@@ -27,8 +27,8 @@
                                             <th scope="col" class="text-center"> Item Name </th>
                                             <th scope="col" class="text-center"> Quantity </th>
                                             <th scope="col" class="text-center"> Price </th>
-                                            <th scope="col" class="text-center"> Status </th>
                                             <th scope="col" class="text-center"> Total </th>
+                                            <th scope="col" class="text-center"> Status </th>
                                             <th scope="col" style="width:10%" class="text-center">Action</th>
                                         </tr>
                                     </thead>

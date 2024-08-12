@@ -41,7 +41,7 @@
                                 @php
                                     switch($item['delivered'] ){
                                         case 'done' :
-                                            echo '<span class="badge bg-success shadow border-0 ms-2 mb-2">done</span>';
+                                            echo '<span class="badge bg-success shadow border-0 ms-2 mb-2">order allredy process</span>';
                                         break;
                                         default :
                                             echo '<span class="badge bg-warning shadow border-0 ms-2 mb-2">partially sent</span>';
