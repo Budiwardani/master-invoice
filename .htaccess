@@ -1,0 +1,6 @@
+<IfModule mod_rewrite.c>
+RewriteEngine On
+RewriteCond %{REQUEST_URI} !^/master-invoicepublic
+RewriteBase /
+RewriteRule ^(.*)?$ /master-invoice/public/$1 [L,R=301]
+</IfModule>

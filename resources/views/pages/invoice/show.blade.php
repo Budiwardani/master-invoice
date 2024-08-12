@@ -5,8 +5,6 @@
     <div class="card shadow-lg mx-4 mt-8" id="user_info">
         <div class="card-body p-3">
             <div class="row gx-4">
-                {{-- <form role="form" method="post" action="{{ route('do.update',$data->random_id) }}">
-                @csrf --}}
                 <div class="row mb-2">
                     <div class="col-8">
 
