@@ -48,7 +48,6 @@ class CompanyController extends Controller
             'company_telephone'      => $request->telephone,
             'company_fax'        => $request->fax,
             'company_type'      => $request->company_type,
-            // 'random_id'  => $request->telephone,
         ]);
 
         $encrypted_id   = md5($request->company_code.$insert->id.Carbon::now());

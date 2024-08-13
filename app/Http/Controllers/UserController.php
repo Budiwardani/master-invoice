@@ -42,7 +42,6 @@ class UserController extends Controller
      */
     public function store(Request $request)
     {
-        // dd($request);
         $pwd    = bcrypt('secret');
         $this->validate($request, [
             'email'     =>  'required|unique:users',
