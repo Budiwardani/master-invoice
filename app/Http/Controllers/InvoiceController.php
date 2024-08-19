@@ -16,6 +16,11 @@ class InvoiceController extends Controller
     /**
      * Display a listing of the resource.
      */
+    public function home(){
+        return view('pages.invoice.home',[
+        ]);
+    }
+
     public function index()
     {
         $roles_array = array();
@@ -44,6 +49,82 @@ class InvoiceController extends Controller
     /**
      * Show the form for creating a new resource.
      */
+    public function create_new()
+    {
+        $roles_array = array();
+        $role_name = User::where('id',Auth::user()->id)->with('roles')->first();
+        foreach($role_name->roles as $role){
+            array_push($roles_array,$role->name);
+        }
+
+        // if(in_array('Supplier',$roles_array)){
+        $company_id = $role_name->company_id;
+        $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail.item_data','invoice')
+        ->whereHas('quotation',function ($query) use ($company_id) {
+            return $query->where('company_id',$company_id);
+        })
+        ->whereDoesntHave('invoice')
+        ->get();
+        // } else {
+        //     $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail.item_data','invoice')->get();
+        // }
+        $return_arr = array();
+        foreach($data as $current) {
+            $delivered = '';
+            $invoice = 'none';
+            $sum = 0;
+            $orders_cont = 0;
+            $deliveries = array();
+            foreach($current->detail as $det){
+                $orders_cont = $orders_cont + $det->quantity;
+            }
+            foreach($current->deliveries as $row_data){
+                foreach($row_data->purchaseOrder->detail as $po_detail){
+                    foreach($row_data->detail as $data_detail){
+                        if($data_detail->item_id == $po_detail->item_id) {
+                            if($row_data->purchase_order_id == $current->id){
+                                $sum = $sum + $data_detail->quantity;
+                                array_push($deliveries,[
+                                    'delivery_number'   => $row_data->delivery_number,
+                                    'item_code'         => $data_detail->item_data->item_code,
+                                    'item_name'         => $data_detail->item_data->item_name,
+                                    'quantity'          => $data_detail->quantity
+                                ]);
+                            }
+                        }
+                    }
+                }
+                if($orders_cont == $sum) {
+                    $delivered = 'done';
+                } else {
+                    $delivered = 'part';
+                }
+                if(!$current->invoice == null){
+                    $invoice = 'exist';
+                }
+            }
+
+            array_push($return_arr,[
+                'po_number'         => $current->ref_number,
+                'create_date'       => $current->created_at,
+                'status'            => $current->current_status,
+                'due_date'          => $current->due_date,
+                'random_id'         => $current->random_id,
+                'delivered'         => $delivered,
+                'invoice'           => $invoice,
+                'credit_terms_id'   => $current->credit_terms_id,
+                'date'              => $current->date,
+                'invoice_id'        => ($current->invoice ? $current->invoice->random_id : null),
+                'deliveries'        => $deliveries
+            ]);
+        }
+
+        return view('pages.invoice.index',[
+            'data'      => $data,
+            'return_arr'=> $return_arr,
+        ]);
+    }
+
     public function create($id)
     {
         $data = Invoice::where('random_id',$id)->first();
