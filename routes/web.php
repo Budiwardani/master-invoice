@@ -105,9 +105,11 @@ Route::group(['middleware' => 'auth'], function () {
     });
 
     Route::prefix('invoice')->group(function () {
-        Route::get('/index', [InvoiceController::class, 'index'])->name('invoice.index');
+        Route::get('/index', [InvoiceController::class, 'home'])->name('invoice.index');
+        Route::get('/status', [InvoiceController::class, 'index'])->name('invoice.status');
         Route::get('/edit/{slug}', [InvoiceController::class, 'edit'])->name('invoice.edit');
         Route::get('/show/{slug}', [InvoiceController::class, 'show'])->name('invoice.show');
+        Route::get('/create_new', [InvoiceController::class, 'create_new'])->name('invoice.create_new');
         Route::get('/create/{slug}', [InvoiceController::class, 'create'])->name('invoice.create');
         Route::post('/update/{slug}', [InvoiceController::class, 'update'])->name('invoice.update');
         Route::post('/store', [InvoiceController::class, 'store'])->name('invoice.store');
