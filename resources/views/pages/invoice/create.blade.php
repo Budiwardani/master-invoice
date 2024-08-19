@@ -66,35 +66,6 @@
                                 </div>
                             </div>
                         </div>
-                        {{-- <div class="col-4">
-                            <div class="card p-2">
-                                <h4>Delivery Order Data</h4>
-                                <div class="row">
-                                    <div class="col-4">
-                                        Ref Number
-                                    </div>
-                                    <div class="col-8">
-                                        : <a href="{{ '/delivery-order/show/'.$data->deliveryOrder->random_id }}">{{ $data->deliveryOrder->delivery_number }}</a>
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4">
-                                        Create Date
-                                    </div>
-                                    <div class="col-8">
-                                        : {{ formatDate($data->deliveryOrder->created_at) }}
-                                    </div>
-                                </div>
-                                <div class="row">
-                                    <div class="col-4">
-                                        Update Date
-                                    </div>
-                                    <div class="col-8">
-                                        : {{ formatDate($data->deliveryOrder->updated_at) }}
-                                    </div>
-                                </div>
-                            </div>
-                        </div> --}}
                     </div>
                     <div class="row mb-2">
                         <div class="col-6">
