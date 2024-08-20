@@ -209,11 +209,11 @@
                                     @if(Auth::user()->getRoleNames()[0] != 'Supplier')
                                         <button class="btn btn-success shadow-sm rounded-sm" type="submit">Set as Paid</button>
                                     @endif
-                                @else
-                                    @if(Auth::user()->getRoleNames()[0] == 'Supplier')
-                                        <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
-                                        <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
-                                    @endif
+                                @endif
+                            @else
+                                @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                    <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
+                                    <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
                                 @endif
                             @endif
                         </div>

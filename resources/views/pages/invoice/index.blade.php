@@ -11,6 +11,7 @@
                             <th style="width:100px;" class="text-center"> No. </th>
                             <th scope="col" class="text-center"> Invoice Number </th>
                             <th scope="col" class="text-center"> Invoice Date </th>
+                            <th scope="col" class="text-center"> Total </th>
                             <th scope="col" class="text-center"> Status </th>
                             <th scope="col" class="text-center"> Action </th>
                         </tr>
@@ -21,6 +22,7 @@
                             <td>{{ $index + 1 }}</td>
                             <td>{{ $item->invoice_number }}</td>
                             <td class="text-center">{{ formatDate($item->date) }}</td>
+                            <td class="text-end">{{ formatNumber($item->total) }}</td>
                             <td class="text-center">{{ $item->payment_status }}</td>
                             <td class="text-center">
                                 <button class="btn btn-success shadow-sm rounded-sm" type="button" onclick="view({{ $item }})">View</button>
