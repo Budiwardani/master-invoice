@@ -9,34 +9,23 @@
                     <thead>
                         <tr>
                             <th style="width:100px;" class="text-center"> No. </th>
-                            <th scope="col" class="text-center"> Delivery Number </th>
-                            <th scope="col" class="text-center"> Item Code </th>
-                            <th scope="col" class="text-center"> Item Name </th>
-                            <th scope="col" class="text-center"> Quantity </th>
+                            <th scope="col" class="text-center"> Invoice Number </th>
+                            <th scope="col" class="text-center"> Invoice Date </th>
+                            <th scope="col" class="text-center"> Status </th>
+                            <th scope="col" class="text-center"> Action </th>
                         </tr>
                     </thead>
                     <tbody>
-                        @foreach ($return_arr as $index=>$item)
+                        @foreach ($data as $index=>$item)
                         <tr>
                             <td>{{ $index + 1 }}</td>
-                            <td colspan="3">PO Number : {{ $item['po_number'] }}</td>
-                            <td class="text-end">
-                                <form role="form" method="post" action="{{ route('invoice.store') }}">
-                                    @csrf
-                                    <input type="hidden" value="{{ $item['random_id'] }}" name="random_id">
-                                    <button class="btn btn-success shadow-sm rounded-sm" type="submit">Create Invoice</button>
-                                </form>
+                            <td>{{ $item->invoice_number }}</td>
+                            <td class="text-center">{{ formatDate($item->date) }}</td>
+                            <td class="text-center">{{ $item->payment_status }}</td>
+                            <td class="text-center">
+                                <button class="btn btn-success shadow-sm rounded-sm" type="button" onclick="view({{ $item }})">View</button>
                             </td>
                         </tr>
-                            @foreach ($item['deliveries'] as $idx=>$delivery)
-                            <tr>
-                                <td>{{ $index + 1 }}.{{ $idx + 1 }}</td>
-                                <td>{{ $delivery['delivery_number'] }}</td>
-                                <td>{{ $delivery['item_code'] }}</td>
-                                <td>{{ $delivery['item_name'] }}</td>
-                                <td class="text-end">{{ $delivery['quantity'] }}</td>
-                            </tr>
-                            @endforeach
                         @endforeach
                     </tbody>
                 </table>
@@ -154,4 +143,19 @@
             }
         }
     </style>
+
+@push('js')
+<script>
+    function view(data){
+        if(!data.due_date || !data.invoice_number) {
+            console.log('create');
+            window.location.href = '/invoice/create/'+data.random_id
+        } else {
+            console.log('edit');
+            window.location.href = '/invoice/edit/'+data.random_id
+        }
+    };
+</script>
+@endpush
+
 @endsection

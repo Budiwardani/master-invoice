@@ -23,6 +23,15 @@ class InvoiceController extends Controller
 
     public function index()
     {
+        $now = Carbon::now()->format('Y-m-d');
+        $all_invoices = Invoice::where('payment_status','On Process')->get();
+        foreach($all_invoices as $invoice) {
+            if($invoice->due_date < $now){
+                $invoice->update([
+                    'payment_status'    => 'Overdue'
+                ]);
+            }
+        }
         $roles_array = array();
         $role_name = User::where('id',Auth::user()->id)->with('roles')->first();
         foreach($role_name->roles as $role){
@@ -39,7 +48,6 @@ class InvoiceController extends Controller
         } else {
             $data = Invoice::with('detail.item_data','purchaseOrder','deliveryOrder','quotation.company')->get();
         }
-        // dd($data);
 
         return view('pages.invoice.index',[
             'data'      => $data,
@@ -57,7 +65,6 @@ class InvoiceController extends Controller
             array_push($roles_array,$role->name);
         }
 
-        // if(in_array('Supplier',$roles_array)){
         $company_id = $role_name->company_id;
         $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail.item_data','invoice')
         ->whereHas('quotation',function ($query) use ($company_id) {
@@ -65,9 +72,7 @@ class InvoiceController extends Controller
         })
         ->whereDoesntHave('invoice')
         ->get();
-        // } else {
-        //     $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail.item_data','invoice')->get();
-        // }
+
         $return_arr = array();
         foreach($data as $current) {
             $delivered = '';
@@ -140,7 +145,7 @@ class InvoiceController extends Controller
     {
         $sum = 0;
         $data = PurchaseOrder::with('detail','quotation')->where('random_id',$request->random_id)->first();
-        // dd($data,$data->purchaseOrder->id);
+
         $rendom_id  = md5(Carbon::now());
         $insert = Invoice::create([
             'purchase_order_id' => $data->id,
@@ -152,7 +157,7 @@ class InvoiceController extends Controller
             'total'             => 0,
             'tax'               => 0,
             'grand_total'       => 0,
-            'payment_status'    => 'waiting',
+            'payment_status'    => 'On Process',
             'random_id'         => $rendom_id
         ]);
 
@@ -189,12 +194,14 @@ class InvoiceController extends Controller
 
         $update = $invoice_data->update([
             'invoice_number'   => $request->invoice_number,
+            'tax_number'   => $request->tax_number,
             'due_date'   => $request->due_date,
+            'date'   => $request->invoice_date,
             'tax'   => 0.11 * $invoice_data->sub_total,
             'grand_total'   => $invoice_data->sub_total + (0.11 * $invoice_data->sub_total),
         ]);
 
-        return redirect()->route('invoice.index')->with('success','created');
+        return redirect()->route('invoice.status')->with('success','created');
     }
 
     /**
@@ -222,17 +229,35 @@ class InvoiceController extends Controller
     /**
      * Show the form for editing the specified resource.
      */
-    public function edit(Invoice $invoice)
+    public function edit($id)
     {
-        //
+        $data = Invoice::where('random_id',$id)->first();
+        return view('pages.invoice.edit',[
+            'data'      => $data,
+        ]);
     }
 
     /**
      * Update the specified resource in storage.
      */
-    public function update(Request $request, Invoice $invoice)
+    public function update(Request $request, $id)
     {
-        //
+        $invoice_data = Invoice::where('random_id',$id)->first();
+        if(Auth::user()->getRoleNames()[0] == 'Supplier') {
+            $validatedData = $request->validate([
+                'tax_number'    => 'required',
+            ]);
+
+            $update = $invoice_data->update([
+                'tax_number'   => $request->tax_number,
+            ]);
+        } else {
+            $update = $invoice_data->update([
+                'payment_status'   => 'Paid',
+            ]);
+        }
+
+        return redirect()->route('invoice.status')->with('success','updated');
     }
 
     /**

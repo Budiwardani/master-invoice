@@ -108,10 +108,6 @@ class DeliveryOrderController extends Controller
             ]);
         }
 
-        // $purchaseOrder->update([
-        //     'current_status'    => 'approved'
-        // ]);
-
         if($insert){
             return redirect()->route('do.create',$rendom_id);
         }

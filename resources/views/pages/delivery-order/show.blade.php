@@ -45,7 +45,7 @@
                                         <select class="form-control" name="status">
                                             <option value="">Select One</option>
                                             <option value="on delivery">On Delivery</option>
-                                            <option value="arrived">Arrived</option>
+                                            <option value="arrived">Received</option>
                                         </select>
                                         @else
                                         {{ $data->current_status }}

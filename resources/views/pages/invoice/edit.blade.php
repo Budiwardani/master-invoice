@@ -1,67 +1,226 @@
 @extends('layouts.app', ['class' => 'g-sidenav-show bg-gray-100'])
 
 @section('content')
-    @include('layouts.navbars.auth.topnav', ['title' => 'Edit Management'])
+    @include('layouts.navbars.auth.topnav', ['title' => 'Invoice'])
     <div class="card shadow-lg mx-4 mt-8" id="user_info">
         <div class="card-body p-3">
             <div class="row gx-4">
-                <form role="form" method="post" action="{{ route('user.update', $user->encrypted_id) }}">
-                    @csrf
-                    <div class="row">
-                        <div class="col-md-12">
-                            <div class="mb-3">
-                                <label class="fw-bold">Name</label>
-                                <input class="form-control" value="{{ $user->name }}" name="name" type="text" placeholder="Name">
+                <form role="form" method="post" action="{{ route('invoice.update',$data->random_id) }}">
+                @csrf
+                    <div class="row mb-2">
+                        <div class="col-6">
+                            <div class="card p-2">
+                                <h4>Quotation Data</h4>
+                                <div class="row">
+                                    <div class="col-4">
+                                        Ref Number
+                                    </div>
+                                    <div class="col-8">
+                                        : <a href="{{ '/quotation/index' }}">{{ $data->quotation->ref_number }}</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        Create Date
+                                    </div>
+                                    <div class="col-8">
+                                        : {{ formatDate($data->quotation->created_at) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        Supplier
+                                    </div>
+                                    <div class="col-8">
+                                        : {{ $data->quotation->company->company_name }}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-6">
+                            <div class="card p-2">
+                                <h4>Purchase Order Data</h4>
+                                <div class="row">
+                                    <div class="col-4">
+                                        Ref Number
+                                    </div>
+                                    <div class="col-8">
+                                        : <a href="{{ '/purchase-order/show/'.$data->purchaseOrder->random_id }}">{{ $data->purchaseOrder->ref_number }}</a>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        Create Date
+                                    </div>
+                                    <div class="col-8">
+                                        : {{ formatDate($data->purchaseOrder->created_at) }}
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-4">
+                                        Due Date
+                                    </div>
+                                    <div class="col-8">
+                                        : {{ formatDate($data->purchaseOrder->due_date) }}
+                                    </div>
+                                </div>
                             </div>
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="fw-bold">Email</label>
-                                <input class="form-control" value="{{ $user->email }}" name="email" type="email" placeholder="email">
+                    <div class="row mb-2">
+                        <div class="col-3">
+                            <div class="card p-2">
+                                <div>
+                                    Date
+                                </div>
+                                <div>
+                                    @if(!$data->date)
+                                        @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                            <input class="form-control" value="{{ $data->date }}" name="invoice_date" type="date" min="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="date" required>
+                                        @else
+                                            <div class="mt-2 mb-2">Not set yet</div>
+                                        @endif
+                                    @else
+                                        <div class="mt-2 mb-2">{{ formatDate($data->date) }}</div>
+                                    @endif
+                                </div>
                             </div>
                         </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="fw-bold">Gender</label>
-                                <select class="form-control" name="gender">
-                                    <option value="" disabled selected>Choose One</option>
-                                    <option value="m">Male</option>
-                                    <option value="f">Female</option>
-                                </select>
+                        <div class="col-3">
+                            <div class="card p-2">
+                                <div>
+                                    Invoice Number
+                                </div>
+                                <div>
+                                    @if(!$data->due_date)
+                                        @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                            <input class="form-control" value="" name="invoice_number" type="text" placeholder="Invoice Number" required>
+                                        @else
+                                            <div class="mt-2 mb-2">Not set yet</div>
+                                        @endif
+                                    @else
+                                        <div class="mt-2 mb-2">{{ $data->invoice_number }}</div>
+                                    @endif
+                                </div>
                             </div>
+                            @error('invoice_number')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-3">
+                            <div class="card p-2">
+                                <div>
+                                    Due Date
+                                </div>
+                                <div>
+                                    @if(!$data->due_date)
+                                        @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                            <input class="form-control" value="" name="due_date" type="date" min="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="due_date" required>
+                                        @else
+                                        <div class="mt-2 mb-2">Not set yet</div>
+                                        @endif
+                                    @else
+                                        <div class="mt-2 mb-2">{{ formatDate($data->due_date) }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
+                            <div class="card p-2">
+                                <div>
+                                    Tax Invoice Number
+                                </div>
+                                <div>
+                                    @if(!$data->tax_number)
+                                        @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                            <input class="form-control" value="" name="tax_number" type="text" placeholder="Tax Invoice Number" required>
+                                        @else
+                                            <div class="mt-2 mb-2">Not set yet</div>
+                                        @endif
+                                    @else
+                                        <div class="mt-2 mb-2">{{ $data->tax_number }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            @error('tax_number')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
-                    <div class="row">
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="fw-bold">Password</label>
-                                <input class="form-control" value="" :class="{ 'is-invalid': errors.password }" name="password" type="password" placeholder="Password"  @if($user->id != auth()->user()->id) readonly @endif>
-                            </div>
-                        </div>
-                        <div class="col-md-6">
-                            <div class="mb-3">
-                                <label class="fw-bold">Repeat Password</label>
-                                <input class="form-control" value="" :class="{ 'is-invalid': errors.password_confirmation }" name="repeat" type="password" placeholder="Repeat Password" @if($user->id != auth()->user()->id) readonly @endif>
-                            </div>
-                        </div>
-                    </div>
-                    <hr>
-                    <div class="mb-3">
-                        <label class="fw-bold">Role</label>
-                        <br>
-                        @foreach ($roles as $role)
-                            <div class="form-check form-check-inline">
-                                <input class="form-check-input" type="radio" value="{{ $role->id }}" name="roles" id="{{ $role->id }}" @if(count($user->roles)) @if($user->roles[0]->id == $role->id) checked @endif @endif>
-                                <label class="form-check-label" for="{{ $role->id }}">{{ $role->name }}</label>
-                            </div>
-                        @endforeach
-                    </div>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;" class="text-center"> No. </th>
+                                <th scope="col" class="text-center"> Item Code </th>
+                                <th scope="col" class="text-center"> Item Name </th>
+                                <th scope="col" class="text-center"> Quantity </th>
+                                <th scope="col" class="text-center"> Price </th>
+                                <th scope="col" class="text-center"> Total </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($data->detail as $index=>$item)
+                            <tr>
+                                <td>{{ $index + 1 }}</td>
+                                <td>{{ $item->item_data->item_code }}</td>
+                                <td>{{ $item->item_data->item_name }}</td>
+                                <td class="text-end">
+                                    @foreach ($data->purchaseOrder->detail as $order)
+                                        @if($order->item_id == $item->item_id)
+                                            {{ formatNumber($order->quantity) }}
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td class="text-end">
+                                    @foreach ($data->purchaseOrder->detail as $order)
+                                        @if($order->item_id == $item->item_id)
+                                            {{ formatNumber($order->price) }}
+                                        @endif
+                                    @endforeach
+                                </td>
+                                <td class="text-end">
+                                    @foreach ($data->purchaseOrder->detail as $order)
+                                        @if($order->item_id == $item->item_id)
+                                            {{ formatNumber($order->price * $order->quantity) }}
+                                        @endif
+                                    @endforeach
+                                </td>
+                            </tr>
+                            <input class="form-control" value="{{ $item->id }}" name="data[{{ $index }}][detail_id]" type="hidden" >
+                            @endforeach
+                            <tr>
+                                <td colspan="5" class="text-end"><strong>Total</strong></td>
+                                <td class="text-end">{{ formatNumber($data->total) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-end"><strong>TAX</strong></td>
+                                <td class="text-end">{{ formatNumber(0.11 * $data->total) }}</td>
+                            </tr>
+                            <tr>
+                                <td colspan="5" class="text-end"><strong>Grand Total</strong></td>
+                                <td class="text-end">{{ formatNumber($data->total + (0.11 * $data->total)) }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
                     <div class="row mt-3">
-                        <div class="col-12">
-                            <button class="btn btn-primary shadow-sm rounded-sm" type="submit">UPDATE</button>
-                            <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
+                        <div class="col-3">
+                            @if($data->tax_number)
+                                @if($data->payment_status != 'Paid')
+                                    @if(Auth::user()->getRoleNames()[0] != 'Supplier')
+                                        <button class="btn btn-success shadow-sm rounded-sm" type="submit">Set as Paid</button>
+                                    @endif
+                                @else
+                                    @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                        <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
+                                        <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
+                                    @endif
+                                @endif
+                            @endif
+                        </div>
+                        <div class="col-9">
+                            <div class="text-end me-2">
+                                <h3>Payment Status : {{ $data->payment_status }}</h3>
+                            </div>
                         </div>
                     </div>
                 </form>

@@ -8,7 +8,7 @@
                 <form role="form" method="post" action="{{ route('invoice.save',$data->random_id) }}">
                 @csrf
                     <div class="row mb-2">
-                        <div class="col-4">
+                        <div class="col-6">
                             <div class="card p-2">
                                 <h4>Quotation Data</h4>
                                 <div class="row">
@@ -37,7 +37,7 @@
                                 </div>
                             </div>
                         </div>
-                        <div class="col-4">
+                        <div class="col-6">
                             <div class="card p-2">
                                 <h4>Purchase Order Data</h4>
                                 <div class="row">
@@ -68,28 +68,86 @@
                         </div>
                     </div>
                     <div class="row mb-2">
-                        <div class="col-6">
+                        <div class="col-3">
+                            <div class="card p-2">
+                                <div>
+                                    Date
+                                </div>
+                                <div>
+                                    @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                        <input class="form-control" value="{{ $data->date }}" name="invoice_date" type="date" min="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="date" required>
+                                    @else
+                                        @if(!$data->date)
+                                            <div class="mt-2 mb-2">Not set yet</div>
+                                        @else
+                                        <div class="mt-2 mb-2">{{ formatDate($data->date) }}</div>
+                                        @endif
+                                    @endif
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-3">
                             <div class="card p-2">
                                 <div>
                                     Invoice Number
                                 </div>
                                 <div>
-                                    <input class="form-control" value="" name="invoice_number" type="text" placeholder="Invoice Number" required>
+                                    @if(!$data->due_date)
+                                        @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                            <input class="form-control" value="" name="invoice_number" type="text" placeholder="Invoice Number" required>
+                                        @else
+                                            <div class="mt-2 mb-2">Not set yet</div>
+                                        @endif
+                                    @else
+                                        <div class="mt-2 mb-2">{{ $data->invoice_number }}</div>
+                                    @endif
                                 </div>
                             </div>
                             @error('invoice_number')
                                 <div class="text-danger">{{ $message }}</div>
                             @enderror
                         </div>
-                        <div class="col-6">
+                        <div class="col-3">
                             <div class="card p-2">
                                 <div>
                                     Due Date
                                 </div>
-                                <div class="col-8">
-                                    <input class="form-control" value="" name="due_date" type="date" min="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="due_date" required>
+                                <div>
+                                    @if(!$data->due_date)
+                                        @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                            <input class="form-control" value="" name="due_date" type="date" min="{{ \Carbon\Carbon::now()->toDateString() }}" placeholder="due_date" required>
+                                        @else
+                                        <div class="mt-2 mb-2">Not set yet</div>
+                                        @endif
+                                    @else
+                                        <div class="mt-2 mb-2">{{ formatDate($data->due_date) }}</div>
+                                    @endif
                                 </div>
                             </div>
+                            @error('due_date')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
+                        </div>
+                        <div class="col-3">
+                            <div class="card p-2">
+                                <div>
+                                    Tax Invoice Number
+                                </div>
+                                <div>
+                                    @if(!$data->tax_number)
+                                        @if(Auth::user()->getRoleNames()[0] == 'Supplier')
+                                            <input class="form-control" value="" name="tax_number" type="text" placeholder="Tax Invoice Number">
+                                        @else
+                                            <div class="mt-2 mb-2">Not set yet</div>
+                                        @endif
+                                    @else
+                                        <div class="mt-2 mb-2">{{ $data->tax_number }}</div>
+                                    @endif
+                                </div>
+                            </div>
+                            @error('tax_number')
+                                <div class="text-danger">{{ $message }}</div>
+                            @enderror
                         </div>
                     </div>
                     <table class="table table-striped table-bordered table-hover">
