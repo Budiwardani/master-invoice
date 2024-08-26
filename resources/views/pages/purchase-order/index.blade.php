@@ -51,18 +51,18 @@
                             </td>
                             @endif
                             @if(Auth::user()->getRoleNames()[0] == 'Supplier')
-                                    <td class="text-center">
-                                        @if($item['delivered'] == 'done' && $item['invoice'] == 'none')
-                                        <form role="form" method="post" action="{{ route('invoice.store') }}">
-                                            @csrf
-                                            <input type="hidden" value="{{ $item['random_id'] }}" name="random_id">
-                                            <button class="btn btn-success shadow-sm rounded-sm" type="submit">Create Invoice</button>
-                                        </form>
-                                        @elseif($item['delivered'] == 'done' && $item['invoice'] == 'exist')
-                                            <a class="btn btn-primary shadow-sm rounded-sm" href="{{ '../invoice/show/'.$item['invoice_id'] }}"> show invoice </a>
-                                        @endif
-                                    </td>
-                                @endif
+                                <td class="text-center">
+                                    @if($item['delivered'] == 'done' && $item['invoice'] == 'none')
+                                    <form role="form" method="post" action="{{ route('invoice.store') }}">
+                                        @csrf
+                                        <input type="hidden" value="{{ $item['random_id'] }}" name="random_id">
+                                        <button class="btn btn-success shadow-sm rounded-sm" type="submit">Create Invoice</button>
+                                    </form>
+                                    @elseif($item['delivered'] == 'done' && $item['invoice'] == 'exist')
+                                        <a class="btn btn-primary shadow-sm rounded-sm" href="{{ '../invoice/show/'.$item['invoice_id'] }}"> show invoice </a>
+                                    @endif
+                                </td>
+                            @endif
                         </tr>
                         @endforeach
                     </tbody>

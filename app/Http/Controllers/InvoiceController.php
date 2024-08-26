@@ -180,21 +180,21 @@ class InvoiceController extends Controller
             'grand_total'   => $sum,
         ]);
 
-        if($insert){
-            return response()->json([
-                'success'   => true,
-                'message'   => 'Create Invoice Success',
-                'data'      => $rendom_id,
-            ]);
-        }
-
-        return response()->json([
-            'success'   => false,
-            'message'   => 'Failed to create Invoice',
-        ]);
         // if($insert){
-        //     return redirect()->route('invoice.create',$rendom_id)->with('success','created');
+        //     return response()->json([
+        //         'success'   => true,
+        //         'message'   => 'Create Invoice Success',
+        //         'data'      => $rendom_id,
+        //     ]);
         // }
+
+        // return response()->json([
+        //     'success'   => false,
+        //     'message'   => 'Failed to create Invoice',
+        // ]);
+        if($insert){
+            return redirect()->route('invoice.create',$rendom_id)->with('success','created');
+        }
     }
 
     public function save(Request $request,$id)

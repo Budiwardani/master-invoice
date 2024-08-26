@@ -36,7 +36,12 @@
                                 @if($page == 'status')
                                     <button class="btn btn-success shadow-sm rounded-sm" type="button" onclick="view({{ $item }})">View</button>
                                 @else
-                                    <button class="btn btn-success shadow-sm rounded-sm" type="button" onclick="create({{ $item }})">Crete Invoice</button>
+                                    <form role="form" method="post" action="{{ route('invoice.store') }}">
+                                        @csrf
+                                        <input type="hidden" value="{{ $item->random_id }}" name="random_id">
+                                        <button class="btn btn-success shadow-sm rounded-sm" type="submit">Create Invoice</button>
+                                    </form>
+                                    {{-- <button class="btn btn-success shadow-sm rounded-sm" type="button" onclick="create({{ $item }})">Crete Invoice</button> --}}
                                 @endif
                             </td>
                         </tr>
