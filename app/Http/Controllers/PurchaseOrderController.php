@@ -157,6 +157,7 @@ class PurchaseOrderController extends Controller
         }
 
         $update = $po_data->update([
+            'ref_number'        => $request->ref_number,
             'credit_terms_id'   => $term->id,
             'due_date'  => $due_date
         ]);

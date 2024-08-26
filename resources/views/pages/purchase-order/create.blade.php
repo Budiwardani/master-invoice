@@ -10,7 +10,13 @@
                     <div class="row mb-2">
                         <div class="col-6">
                             <div>
-                                <h4>Ref Number : {{ $data->ref_number }}</h4>
+                                {{-- <h4>Ref Number : {{ $data->ref_number }}</h4> --}}
+                                <div class="row">
+                                    <div class="col-6">
+                                        Ref Number
+                                        <input class="form-control" value="" name="ref_number" type="text" placeholder="Ref Number">
+                                    </div>
+                                </div>
                             </div>
                             <div class="row">
                                 <div class="col-6">

@@ -51,6 +51,7 @@ class InvoiceController extends Controller
 
         return view('pages.invoice.index',[
             'data'      => $data,
+            'page'      => 'status',
         ]);
     }
 
@@ -127,6 +128,7 @@ class InvoiceController extends Controller
         return view('pages.invoice.index',[
             'data'      => $data,
             'return_arr'=> $return_arr,
+            'page'      => 'create'
         ]);
     }
 
@@ -179,16 +181,28 @@ class InvoiceController extends Controller
         ]);
 
         if($insert){
-            return redirect()->route('invoice.create',$rendom_id);
+            return response()->json([
+                'success'   => true,
+                'message'   => 'Create Invoice Success',
+                'data'      => $rendom_id,
+            ]);
         }
+
+        return response()->json([
+            'success'   => false,
+            'message'   => 'Failed to create Invoice',
+        ]);
+        // if($insert){
+        //     return redirect()->route('invoice.create',$rendom_id)->with('success','created');
+        // }
     }
 
     public function save(Request $request,$id)
     {
-        $validatedData = $request->validate([
-            'invoice_number'    => 'required',
-            'due_date'          => 'required',
-        ]);
+        // $validatedData = $request->validate([
+        //     'invoice_number'    => 'required',
+        //     'due_date'          => 'required',
+        // ]);
 
         $invoice_data = Invoice::where('random_id',$id)->first();
 
@@ -201,7 +215,22 @@ class InvoiceController extends Controller
             'grand_total'   => $invoice_data->sub_total + (0.11 * $invoice_data->sub_total),
         ]);
 
+        $this->checkOverdue($request->due_date,$invoice_data);
+
         return redirect()->route('invoice.status')->with('success','created');
+    }
+
+    function checkOverdue($date,$invoice) {
+        $now = Carbon::now()->format('Y-m-d');
+        if($invoice->due_date < $now){
+            $invoice->update([
+                'payment_status'    => 'Overdue'
+            ]);
+        } else {
+            $invoice->update([
+                'payment_status'    => 'On Process'
+            ]);
+        }
     }
 
     /**

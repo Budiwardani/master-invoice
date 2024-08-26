@@ -12,7 +12,11 @@
                             <th scope="col" class="text-center"> Invoice Number </th>
                             <th scope="col" class="text-center"> Invoice Date </th>
                             <th scope="col" class="text-center"> Total </th>
+                            @if($page == 'status')
                             <th scope="col" class="text-center"> Status </th>
+                            @else
+                            <th scope="col" class="text-center"> PO Number </th>
+                            @endif
                             <th scope="col" class="text-center"> Action </th>
                         </tr>
                     </thead>
@@ -23,9 +27,17 @@
                             <td>{{ $item->invoice_number }}</td>
                             <td class="text-center">{{ formatDate($item->date) }}</td>
                             <td class="text-end">{{ formatNumber($item->total) }}</td>
-                            <td class="text-center">{{ $item->payment_status }}</td>
+                            @if($page == 'status')
+                                <td class="text-center">{{ $item->payment_status }}</td>
+                            @else
+                                <td class="text-center">{{ $item->ref_number }}</td>
+                            @endif
                             <td class="text-center">
-                                <button class="btn btn-success shadow-sm rounded-sm" type="button" onclick="view({{ $item }})">View</button>
+                                @if($page == 'status')
+                                    <button class="btn btn-success shadow-sm rounded-sm" type="button" onclick="view({{ $item }})">View</button>
+                                @else
+                                    <button class="btn btn-success shadow-sm rounded-sm" type="button" onclick="create({{ $item }})">Crete Invoice</button>
+                                @endif
                             </td>
                         </tr>
                         @endforeach
@@ -149,6 +161,7 @@
 @push('js')
 <script>
     function view(data){
+        console.log(data)
         if(!data.due_date || !data.invoice_number) {
             console.log('create');
             window.location.href = '/invoice/create/'+data.random_id
@@ -157,6 +170,32 @@
             window.location.href = '/invoice/edit/'+data.random_id
         }
     };
+
+    function create(data) {
+        axios.post('/invoice/store', {
+            random_id: data.random_id
+        })
+        .then(function (response) {
+            console.log(response.data);
+            if(response.data.success == true) {
+                Swal.fire({
+                    title: 'Success!',
+                    text: response.data.message,
+                    icon: 'success'
+                });
+                window.location.href = '/invoice/create/'+response.data.data
+            } else {
+                Swal.fire({
+                    title: 'Failed!',
+                    text: response.data.message,
+                    icon: 'errors'
+                });
+            }
+        })
+        .catch(function (error) {
+            console.log(error);
+        });
+    }
 </script>
 @endpush
 
