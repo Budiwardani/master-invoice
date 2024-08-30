@@ -2,53 +2,48 @@
 
 @section('content')
     @include('layouts.navbars.auth.topnav', ['title' => 'Invoice'])
-    <div class="card shadow-lg mx-4 mt-8" id="user_info">
-        <div class="card-body p-3 m-4">
-            <div class="row gx-4">
-                <table class="table table-striped table-bordered table-hover">
-                    <thead>
-                        <tr>
-                            <th style="width:100px;" class="text-center"> No. </th>
-                            <th scope="col" class="text-center"> Invoice Number </th>
-                            <th scope="col" class="text-center"> Invoice Date </th>
-                            <th scope="col" class="text-center"> Total </th>
-                            @if($page == 'status')
-                            <th scope="col" class="text-center"> Status </th>
-                            @else
-                            <th scope="col" class="text-center"> PO Number </th>
-                            @endif
-                            <th scope="col" class="text-center"> Action </th>
-                        </tr>
-                    </thead>
-                    <tbody>
-                        @foreach ($data as $index=>$item)
-                        <tr>
-                            <td>{{ $index + 1 }}</td>
-                            <td>{{ $item->invoice_number }}</td>
-                            <td class="text-center">{{ formatDate($item->date) }}</td>
-                            <td class="text-end">{{ formatNumber($item->total) }}</td>
-                            @if($page == 'status')
-                                <td class="text-center">{{ $item->payment_status }}</td>
-                            @else
-                                <td class="text-center">{{ $item->ref_number }}</td>
-                            @endif
-                            <td class="text-center">
-                                @if($page == 'status')
-                                    <button class="btn btn-success shadow-sm rounded-sm" type="button" onclick="view({{ $item }})">View</button>
-                                @else
-                                    <form role="form" method="post" action="{{ route('invoice.store') }}">
-                                        @csrf
-                                        <input type="hidden" value="{{ $item->random_id }}" name="random_id">
-                                        <button class="btn btn-success shadow-sm rounded-sm" type="submit">Create Invoice</button>
-                                    </form>
-                                @endif
-                            </td>
-                        </tr>
-                        @endforeach
-                    </tbody>
-                </table>
+    <div class="mt-8">
+        @foreach ($data as $item)
+        <div class="card shadow-lg mx-4 mb-4" id="user_info">
+            <div class="card-body p-3 m-4">
+                <h4>PO Number : {{ $item->ref_number }}</h4>
+                <div class="row gx-4">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:100px;" class="text-center"> No. </th>
+                                <th scope="col" class="text-center"> Delivery Number </th>
+                                <th scope="col" class="text-center"> Quantity </th>
+                                <th scope="col" class="text-center"> Price </th>
+                                <th scope="col" class="text-center"> Action </th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @php $index = 0 @endphp
+                            @foreach ($item->deliveries as $index=>$delivery)
+                                @foreach ($delivery->detail as $detail)
+                                @php $index = $index + 1 @endphp
+                                <tr>
+                                    <td class="text-end">{{ $index }}</td>
+                                    <td>{{ $delivery->delivery_number }}</td>
+                                    <td class="text-end">{{ formatNumber($detail->quantity) }}</td>
+                                    <td class="text-end">
+                                        @foreach ($item->detail as $itemDetail)
+                                            @if ($itemDetail->item_id == $detail->item_id)
+                                                {{ formatNumber($itemDetail->price) }}
+                                            @endif
+                                        @endforeach
+                                    </td>
+                                    <td></td>
+                                </tr>
+                                @endforeach
+                            @endforeach
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
+        @endforeach
     </div>
     <div id="alert">
         @include('components.alert')

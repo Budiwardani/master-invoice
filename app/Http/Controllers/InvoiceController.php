@@ -67,70 +67,93 @@ class InvoiceController extends Controller
         }
 
         $company_id = $role_name->company_id;
-        $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail.item_data','invoice')
+        $data = PurchaseOrder::with('quotation.detail','deliveries.detail.item_data','invoice')
         ->whereHas('quotation',function ($query) use ($company_id) {
             return $query->where('company_id',$company_id);
         })
+        ->whereHas('deliveries')
         ->whereDoesntHave('invoice')
         ->get();
 
-        $return_arr = array();
-        foreach($data as $current) {
-            $delivered = '';
-            $invoice = 'none';
-            $sum = 0;
-            $orders_cont = 0;
-            $deliveries = array();
-            foreach($current->detail as $det){
-                $orders_cont = $orders_cont + $det->quantity;
-            }
-            foreach($current->deliveries as $row_data){
-                foreach($row_data->purchaseOrder->detail as $po_detail){
-                    foreach($row_data->detail as $data_detail){
-                        if($data_detail->item_id == $po_detail->item_id) {
-                            if($row_data->purchase_order_id == $current->id){
-                                $sum = $sum + $data_detail->quantity;
-                                array_push($deliveries,[
-                                    'delivery_number'   => $row_data->delivery_number,
-                                    'item_code'         => $data_detail->item_data->item_code,
-                                    'item_name'         => $data_detail->item_data->item_name,
-                                    'quantity'          => $data_detail->quantity
-                                ]);
-                            }
-                        }
-                    }
-                }
-                if($orders_cont == $sum) {
-                    $delivered = 'done';
-                } else {
-                    $delivered = 'part';
-                }
-                if(!$current->invoice == null){
-                    $invoice = 'exist';
-                }
-            }
-
-            array_push($return_arr,[
-                'po_number'         => $current->ref_number,
-                'create_date'       => $current->created_at,
-                'status'            => $current->current_status,
-                'due_date'          => $current->due_date,
-                'random_id'         => $current->random_id,
-                'delivered'         => $delivered,
-                'invoice'           => $invoice,
-                'credit_terms_id'   => $current->credit_terms_id,
-                'date'              => $current->date,
-                'invoice_id'        => ($current->invoice ? $current->invoice->random_id : null),
-                'deliveries'        => $deliveries
-            ]);
-        }
-
-        return view('pages.invoice.index',[
+        // dd($data);
+        return view('pages.invoice.create_new',[
             'data'      => $data,
-            'return_arr'=> $return_arr,
-            'page'      => 'create'
         ]);
     }
+
+    // public function create_new()
+    // {
+    //     $roles_array = array();
+    //     $role_name = User::where('id',Auth::user()->id)->with('roles')->first();
+    //     foreach($role_name->roles as $role){
+    //         array_push($roles_array,$role->name);
+    //     }
+
+    //     $company_id = $role_name->company_id;
+    //     $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail.item_data','invoice')
+    //     ->whereHas('quotation',function ($query) use ($company_id) {
+    //         return $query->where('company_id',$company_id);
+    //     })
+    //     ->whereDoesntHave('invoice')
+    //     ->get();
+
+    //     $return_arr = array();
+    //     foreach($data as $current) {
+    //         $delivered = '';
+    //         $invoice = 'none';
+    //         $sum = 0;
+    //         $orders_cont = 0;
+    //         $deliveries = array();
+    //         foreach($current->detail as $det){
+    //             $orders_cont = $orders_cont + $det->quantity;
+    //         }
+    //         foreach($current->deliveries as $row_data){
+    //             foreach($row_data->purchaseOrder->detail as $po_detail){
+    //                 foreach($row_data->detail as $data_detail){
+    //                     if($data_detail->item_id == $po_detail->item_id) {
+    //                         if($row_data->purchase_order_id == $current->id){
+    //                             $sum = $sum + $data_detail->quantity;
+    //                             array_push($deliveries,[
+    //                                 'delivery_number'   => $row_data->delivery_number,
+    //                                 'item_code'         => $data_detail->item_data->item_code,
+    //                                 'item_name'         => $data_detail->item_data->item_name,
+    //                                 'quantity'          => $data_detail->quantity
+    //                             ]);
+    //                         }
+    //                     }
+    //                 }
+    //             }
+    //             if($orders_cont == $sum) {
+    //                 $delivered = 'done';
+    //             } else {
+    //                 $delivered = 'part';
+    //             }
+    //             if(!$current->invoice == null){
+    //                 $invoice = 'exist';
+    //             }
+    //         }
+
+    //         array_push($return_arr,[
+    //             'po_number'         => $current->ref_number,
+    //             'create_date'       => $current->created_at,
+    //             'status'            => $current->current_status,
+    //             'due_date'          => $current->due_date,
+    //             'random_id'         => $current->random_id,
+    //             'delivered'         => $delivered,
+    //             'invoice'           => $invoice,
+    //             'credit_terms_id'   => $current->credit_terms_id,
+    //             'date'              => $current->date,
+    //             'invoice_id'        => ($current->invoice ? $current->invoice->random_id : null),
+    //             'deliveries'        => $deliveries
+    //         ]);
+    //     }
+
+    //     return view('pages.invoice.create_new',[
+    //         'data'      => $data,
+    //         'return_arr'=> $return_arr,
+    //         'page'      => 'create'
+    //     ]);
+    // }
 
     public function create($id)
     {
