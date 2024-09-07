@@ -89,37 +89,50 @@
                     <table class="table table-striped table-bordered table-hover">
                         <thead>
                             <tr>
-                                <th style="width:100px;" class="text-center"> No. </th>
-                                <th scope="col" class="text-center"> Item Code </th>
-                                <th scope="col" class="text-center"> Item Name </th>
-                                <th scope="col" class="text-center"> Quantity </th>
+                                <th style="width:3%;" class="text-center"> No. </th>
+                                <th scope="col" style="width:10%" class="text-center"> Item Code </th>
+                                <th scope="col" style="width:20%" class="text-center"> Item Name </th>
+                                <th scope="col" style="width:10%" class="text-center"> Quantity </th>
                                 <th scope="col" style="width:10%" class="text-center">Required</th>
+                                @if (Auth::user()->hasAnyPermission(['do.note']))
+                                <th scope="col" class="text-center">Note</th>
+                                @endif
                             </tr>
                         </thead>
                         <tbody>
                             @foreach ($data->detail as $index=>$item)
                             <tr>
-                                <td>{{ $index + 1 }}</td>
+                                <td class="text-end">{{ $index + 1 }}</td>
                                 <td>{{ $item->item_data->item_code }}</td>
                                 <td>{{ $item->item_data->item_name }}</td>
                                 <td class="text-end">{{ $item->quantity }}</td>
                                 <td class="text-end">
                                     @foreach ($data->purchaseOrder->detail as $order)
-                                        @if($order->item_id == $item->item_id)
-                                            {{ formatNumber($order->quantity) }}
-                                        @endif
-                                    @endforeach</td>
+                                    @if($order->item_id == $item->item_id)
+                                    {{ formatNumber($order->quantity) }}
+                                    @endif
+                                    @endforeach
+                                </td>
+                                @if (Auth::user()->hasAnyPermission(['do.note']))
+                                    @if($item->note)
+                                    <td class="text-end">{{ $item->note }}</td>
+                                    @else
+                                    <td class="text-end"><input class="form-control" value="" name="note[{{ $item->id }}]" type="text" placeholder="Note"></td>
+                                    @endif
+                                @endif
                             </tr>
                             @endforeach
                         </tbody>
                     </table>
                     @if (Auth::user()->hasAnyPermission(['do.update']))
-                    <div class="row mt-3">
-                        <div class="col-12">
-                            <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
-                            <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
+                        @if(  $data->current_status != 'arrived' || Auth::user()->hasAnyPermission(['do.note']))
+                        <div class="row mt-3">
+                            <div class="col-12">
+                                <button class="btn btn-success shadow-sm rounded-sm" type="submit">SAVE</button>
+                                <button class="btn btn-warning shadow-sm rouned-sm ms-3" type="reset">RESET</button>
+                            </div>
                         </div>
-                    </div>
+                        @endif
                     @endif
                 </form>
             </div>

@@ -225,6 +225,43 @@
                     </div>
                 </form>
             </div>
+            <hr>
+            <h4>Delivery Data</h4>
+            <div class="row gx-4 m-2">
+                @foreach($data->purchaseOrder->deliveries as $deliveries)
+                    <h5> Delivery Order Number : {{ $deliveries->delivery_number }} </h5>
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                            <tr>
+                                <th style="width:3%;" class="text-center"> No. </th>
+                                <th scope="col" style="width:10%" class="text-center"> Item Code </th>
+                                <th scope="col" style="width:20%" class="text-center"> Item Name </th>
+                                <th scope="col" style="width:10%" class="text-center"> Quantity </th>
+                                <th scope="col" style="width:10%" class="text-center">Required</th>
+                                <th scope="col" class="text-center">Note</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            @foreach ($deliveries->detail as $index=>$item)
+                            <tr>
+                                <td class="text-end">{{ $index + 1 }}</td>
+                                <td>{{ $item->item_data->item_code }}</td>
+                                <td>{{ $item->item_data->item_name }}</td>
+                                <td class="text-end">{{ $item->quantity }}</td>
+                                <td class="text-end">
+                                    @foreach ($data->purchaseOrder->detail as $order)
+                                    @if($order->item_id == $item->item_id)
+                                    {{ formatNumber($order->quantity) }}
+                                    @endif
+                                    @endforeach
+                                </td>
+                                <td class="text-end">{{ $item->note }}</td>
+                            </tr>
+                            @endforeach
+                        </tbody>
+                    </table>
+                @endforeach
+            </div>
         </div>
     </div>
     <div id="alert">

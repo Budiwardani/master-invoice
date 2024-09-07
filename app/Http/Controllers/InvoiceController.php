@@ -75,7 +75,6 @@ class InvoiceController extends Controller
         ->whereDoesntHave('invoice')
         ->get();
 
-        // dd($data);
         return view('pages.invoice.create_new',[
             'data'      => $data,
         ]);
@@ -283,7 +282,8 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $data = Invoice::where('random_id',$id)->first();
+        $data = Invoice::with('purchaseOrder.deliveries.detail.item_data')->where('random_id',$id)->first();
+
         return view('pages.invoice.edit',[
             'data'      => $data,
         ]);

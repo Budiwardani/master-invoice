@@ -211,9 +211,22 @@ class DeliveryOrderController extends Controller
     {
         $po_data = DeliveryOrder::where('random_id',$random_id)->first();
 
-        $update = $po_data->update([
-            'current_status'   => $request->status
-        ]);
+        if($request->note) {
+            foreach($request->note as $key=>$note) {
+                if($note) {
+                    DeliveryOrderDetail::where('id',$key)->update([
+                        'note'  => $note
+                    ]);
+                }
+            }
+        }
+
+        if($request->status) {
+            $update = $po_data->update([
+                'current_status'   => $request->status
+            ]);
+        }
+
 
         return redirect()->route('do.show',$random_id)->with('success','created');
     }
