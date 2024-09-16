@@ -13,9 +13,6 @@ return new class extends Migration
     {
         Schema::create('invoices', function (Blueprint $table) {
             $table->id();
-            $table->integer('purchase_order_id');
-            $table->integer('sales_leter_id');
-            $table->string('delivery_order_id');
             $table->string('invoice_number')->nullable();
             $table->date('date');
             $table->date('due_date')->nullable();
@@ -24,7 +21,7 @@ return new class extends Migration
             $table->integer('total');
             $table->integer('tax');
             $table->integer('grand_total');
-            $table->enum('payment_status',['waiting', 'paid']);
+            $table->enum('payment_status',['Paid','Overdue','On Process']);
             $table->string('random_id');
             $table->timestamps();
         });

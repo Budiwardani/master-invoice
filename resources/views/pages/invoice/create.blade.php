@@ -7,7 +7,7 @@
             <div class="row gx-4">
                 <form role="form" method="post" action="{{ route('invoice.save',$data->random_id) }}">
                 @csrf
-                    <div class="row mb-2">
+                    {{-- <div class="row mb-2">
                         <div class="col-6">
                             <div class="card p-2">
                                 <h4>Quotation Data</h4>
@@ -66,7 +66,7 @@
                                 </div>
                             </div>
                         </div>
-                    </div>
+                    </div> --}}
                     <div class="row mb-2">
                         <div class="col-3">
                             <div class="card p-2">
@@ -168,21 +168,21 @@
                                 <td>{{ $item->item_data->item_code }}</td>
                                 <td>{{ $item->item_data->item_name }}</td>
                                 <td class="text-end">
-                                    @foreach ($data->purchaseOrder->detail as $order)
+                                    @foreach ($data->detail as $order)
                                         @if($order->item_id == $item->item_id)
                                             {{ formatNumber($order->quantity) }}
                                         @endif
                                     @endforeach
                                 </td>
                                 <td class="text-end">
-                                    @foreach ($data->purchaseOrder->detail as $order)
+                                    @foreach ($data->detail as $order)
                                         @if($order->item_id == $item->item_id)
                                             {{ formatNumber($order->price) }}
                                         @endif
                                     @endforeach
                                 </td>
                                 <td class="text-end">
-                                    @foreach ($data->purchaseOrder->detail as $order)
+                                    @foreach ($data->detail as $order)
                                         @if($order->item_id == $item->item_id)
                                             {{ formatNumber($order->price * $order->quantity) }}
                                         @endif

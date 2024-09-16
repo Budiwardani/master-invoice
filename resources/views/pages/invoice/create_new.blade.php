@@ -4,45 +4,48 @@
     @include('layouts.navbars.auth.topnav', ['title' => 'Invoice'])
     <div class="mt-8">
         @if (count($data) > 0)
-            @foreach ($data as $item)
             <div class="card shadow-lg mx-4 mb-4" id="user_info">
                 <div class="card-body p-3 m-4">
-                    <h4>PO Number : {{ $item->ref_number }}</h4>
                     <form role="form" method="post" action="{{ route('invoice.store') }}">
-                    <div class="row gx-4">
-                        <table class="table table-striped table-bordered table-hover">
-                            <thead>
-                                <tr>
-                                    <th style="width:100px;" class="text-center"> No. </th>
-                                    <th scope="col" class="text-center"> Delivery Number </th>
-                                    <th scope="col" class="text-center"> Item Name </th>
-                                    <th scope="col" class="text-center"> Quantity </th>
-                                    <th scope="col" class="text-center"> Price </th>
-                                    <th scope="col" class="text-center"> Action </th>
-                                </tr>
-                            </thead>
-                            <tbody>
-                                @php $index = 0 @endphp
-                                @foreach ($item->deliveries as $index=>$delivery)
-                                    @foreach ($delivery->detail as $detail)
-                                    @php $index = $index + 1 @endphp
+                        <div class="row gx-4">
+                            <table class="table table-striped table-bordered table-hover">
+                                <thead>
                                     <tr>
-                                        <td class="text-end">{{ $index }}</td>
-                                        <td>{{ $delivery->delivery_number }}</td>
-                                        <td>[{{ $detail->item_data->item_code }}] {{ $detail->item_data->item_name }}</td>
-                                        <td class="text-end">{{ formatNumber($detail->quantity) }}</td>
-                                        <td class="text-end">
-                                            @foreach ($item->detail as $itemDetail)
-                                                @if ($itemDetail->item_id == $detail->item_id)
-                                                    {{ formatNumber($itemDetail->price) }}
-                                                @endif
-                                            @endforeach
-                                        </td>
-                                        <td class="text-center">
-                                            <input type="checkbox" name="items[]" value="{{$detail->item_data->id}}/{{ $detail->price }}" checked>
-                                        </td>
+                                        <th style="width:100px;" class="text-center"> No. </th>
+                                        <th scope="col" class="text-center"> PO Number </th>
+                                        <th scope="col" class="text-center"> Delivery Number </th>
+                                        <th scope="col" class="text-center"> Item Name </th>
+                                        <th scope="col" class="text-center"> Quantity </th>
+                                        <th scope="col" class="text-center"> Price </th>
+                                        <th scope="col" class="text-center"> Action </th>
                                     </tr>
+                                </thead>
+                                <tbody>
+                                @foreach ($data as $item)
+                                    @php $index = 0 @endphp
+                                    @foreach ($item->deliveries as $index=>$delivery)
+                                        @php $index = $index + 1 @endphp
+                                        <tr>
+                                            <td class="text-end">{{ $index }}</td>
+                                            <td>{{ $delivery->delivery_number }}</td>
+                                            <td>{{ $item->ref_number }}</td>
+                                            <td>@foreach ($delivery->detail as $detail)[{{ $detail->item_data->item_code }}] {{ $detail->item_data->item_name }}<br>@endforeach</td>
+                                            <td class="text-end">@foreach ($delivery->detail as $detail){{ formatNumber($detail->quantity) }}<br>@endforeach</td>
+                                            <td class="text-end">
+                                                @foreach ($delivery->detail as $detail)
+                                                    @foreach ($item->detail as $itemDetail)
+                                                        @if ($itemDetail->item_id == $detail->item_id)
+                                                            {{ formatNumber($itemDetail->price) }}
+                                                        @endif
+                                                    @endforeach
+                                                <br>@endforeach
+                                            </td>
+                                            <td class="text-center">
+                                                <input type="checkbox" name="items[]" value="{{$delivery->random_id}}" checked>
+                                            </td>
+                                        </tr>
                                     @endforeach
+                                <input type="hidden" value="{{ $item->quotation->company_id }}" name="company_id">
                                 @endforeach
                             </tbody>
                         </table>
@@ -55,7 +58,6 @@
                     </form>
                 </div>
             </div>
-            @endforeach
         @else
             <h2 class="mx-4 mb-4">No data to create new Invoice</h2>
         @endif

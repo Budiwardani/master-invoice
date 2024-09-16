@@ -26,13 +26,13 @@ class PurchaseOrderController extends Controller
 
         if(in_array('Supplier',$roles_array)){
             $company_id = $role_name->company_id;
-            $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail','invoice')
+            $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail')
             ->whereHas('quotation',function ($query) use ($company_id) {
                 return $query->where('company_id',$company_id);
             })
             ->get();
         } else {
-            $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail','invoice')->get();
+            $data = PurchaseOrder::with('detail.item_data','quotation.company','deliveries.detail')->get();
         }
         $return_arr = array();
         foreach($data as $current) {
@@ -58,9 +58,6 @@ class PurchaseOrderController extends Controller
                 } else {
                     $delivered = 'part';
                 }
-                if(!$current->invoice == null){
-                    $invoice = 'exist';
-                }
             }
 
             array_push($return_arr,[
@@ -73,7 +70,6 @@ class PurchaseOrderController extends Controller
                 'invoice'           => $invoice,
                 'credit_terms_id'   => $current->credit_terms_id,
                 'date'              => $current->date,
-                'invoice_id'        => ($current->invoice ? $current->invoice->random_id : null),
             ]);
         }
         // dd($data,$return_arr);

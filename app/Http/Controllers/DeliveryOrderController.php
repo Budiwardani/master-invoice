@@ -26,13 +26,13 @@ class DeliveryOrderController extends Controller
 
         if(in_array('Supplier',$roles_array)){
             $company_id = $role_name->company_id;
-            $data = DeliveryOrder::with('detail.item_data','purchaseOrder.detail','purchaseOrder.quotation.company','invoice')
+            $data = DeliveryOrder::with('detail.item_data','purchaseOrder.detail','purchaseOrder.quotation.company')
             ->whereHas('purchaseOrder.quotation',function ($query) use ($company_id) {
                 return $query->where('company_id',$company_id);
-            })
+            })->whereNull('invoice_id')
             ->get();
         } else {
-            $data = DeliveryOrder::with('detail.item_data','purchaseOrder.detail','purchaseOrder.quotation.company','invoice')->get();
+            $data = DeliveryOrder::with('detail.item_data','purchaseOrder.detail','purchaseOrder.quotation.company')->whereNull('invoice_id')->get();
         }
         // dd($data);
         foreach($data as $row_data) {
@@ -52,9 +52,9 @@ class DeliveryOrderController extends Controller
                     }
                 }
             }
-            if(!$row_data->invoice == null){
-                $invoice = 'exist';
-            }
+            // if(!$row_data->invoice == null){
+            //     $invoice = 'exist';
+            // }
             array_push($return_arr,[
                 'company_name'      => ($row_data->purchaseOrder->quotation ? $row_data->purchaseOrder->quotation->company->company_name : ''),
                 'delivery_number'   => $row_data->delivery_number,

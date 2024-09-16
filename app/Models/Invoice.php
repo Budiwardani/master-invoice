@@ -12,19 +12,14 @@ class Invoice extends Model
         'id'
     ];
 
-    public function quotation()
+    public function company()
     {
-        return $this->belongsTo(SalesLetter::class, 'sales_leter_id');
-    }
-
-    public function purchaseOrder()
-    {
-        return $this->belongsTo(PurchaseOrder::class, 'purchase_order_id');
+        return $this->belongsTo(Company::class, 'company_id');
     }
 
     public function deliveryOrder()
     {
-        return $this->belongsTo(DeliveryOrder::class, 'delivery_order_id');
+        return $this->hasMany(DeliveryOrder::class, 'invoice_id','id');
     }
 
     public function detail()

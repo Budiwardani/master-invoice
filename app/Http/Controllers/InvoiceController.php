@@ -40,13 +40,11 @@ class InvoiceController extends Controller
 
         if(in_array('Supplier',$roles_array)){
             $company_id = $role_name->company_id;
-            $data = Invoice::with('detail.item_data','purchaseOrder','deliveryOrder','quotation.company')
-            ->whereHas('quotation',function ($query) use ($company_id) {
-                return $query->where('company_id',$company_id);
-            })
+            $data = Invoice::with('detail.item_data','deliveryOrder','company')
+            ->where('company_id',$company_id)
             ->get();
         } else {
-            $data = Invoice::with('detail.item_data','purchaseOrder','deliveryOrder','quotation.company')->get();
+            $data = Invoice::with('detail.item_data','deliveryOrder','company')->get();
         }
 
         return view('pages.invoice.index',[
@@ -67,12 +65,19 @@ class InvoiceController extends Controller
         }
 
         $company_id = $role_name->company_id;
-        $data = PurchaseOrder::with('quotation.detail','deliveries.detail.item_data','invoice')
+        // $data = DeliveryOrder::with('quotation.detail','deliveries.detail.item_data')
+        // ->whereHas('quotation',function ($query) use ($company_id) {
+        //     return $query->where('company_id',$company_id);
+        // })
+        // ->whereHas('deliveries')
+        // ->get();
+        $data = PurchaseOrder::with('quotation.detail','deliveries.detail.item_data')
         ->whereHas('quotation',function ($query) use ($company_id) {
             return $query->where('company_id',$company_id);
         })
-        ->whereHas('deliveries')
-        ->whereDoesntHave('invoice')
+        ->whereHas('deliveries',function ($query) use ($company_id) {
+            return $query->whereNull('invoice_id');
+        })
         ->get();
 
         return view('pages.invoice.create_new',[
@@ -156,7 +161,8 @@ class InvoiceController extends Controller
 
     public function create($id)
     {
-        $data = Invoice::where('random_id',$id)->first();
+        $data = Invoice::where('random_id',$id)->with('detail','deliveryOrder')->first();
+        // dd($data);
         return view('pages.invoice.create',[
             'data'      => $data,
         ]);
@@ -168,13 +174,10 @@ class InvoiceController extends Controller
     public function store(Request $request)
     {
         $sum = 0;
-        $data = PurchaseOrder::with('detail','quotation')->where('random_id',$request->random_id)->first();
+        // $data = PurchaseOrder::with('detail','quotation')->where('random_id',$request->random_id)->first();
 
         $rendom_id  = md5(Carbon::now());
         $insert = Invoice::create([
-            'purchase_order_id' => $data->id,
-            'sales_leter_id'    => $data->quotation->id,
-            'delivery_order_id' => $data->id,
             'date'              => Carbon::now(),
             'sub_total'         => 0,
             'discount'          => 0,
@@ -182,17 +185,25 @@ class InvoiceController extends Controller
             'tax'               => 0,
             'grand_total'       => 0,
             'payment_status'    => 'On Process',
-            'random_id'         => $rendom_id
+            'random_id'         => $rendom_id,
+            'company_id'        => $request->company_id
         ]);
 
-        foreach($data->detail as $item){
-            $sum = $sum + ($item->quantity * $item->price);
-            InvoiceDetail::create([
-                'invoice_id'    => $insert->id,
-                'item_id'       => $item->item_id,
-                'quantity'      => $item->quantity,
-                'price'         => $item->price,
-                'total'         => $item->quantity * $item->price,
+        foreach($request->items as $item){
+            $datas = DeliveryOrder::with('purchaseOrder.detail')->where('random_id',$item)->first();
+            // dd($item);
+            foreach($datas->purchaseOrder->detail as $data){
+                $sum = $sum + ($data->quantity * $data->price);
+                InvoiceDetail::create([
+                    'invoice_id'    => $insert->id,
+                    'item_id'       => $data->item_id,
+                    'quantity'      => $data->quantity,
+                    'price'         => $data->price,
+                    'total'         => $data->quantity * $data->price,
+                ]);
+            }
+            $datas->update([
+                'invoice_id'     => $insert->id,
             ]);
         }
 
@@ -282,7 +293,8 @@ class InvoiceController extends Controller
      */
     public function edit($id)
     {
-        $data = Invoice::with('purchaseOrder.deliveries.detail.item_data')->where('random_id',$id)->first();
+        $data = Invoice::with('deliveryOrder.detail.item_data')->where('random_id',$id)->first();
+        // dd($data);
 
         return view('pages.invoice.edit',[
             'data'      => $data,
